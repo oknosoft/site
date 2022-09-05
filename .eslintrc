@@ -1,5 +1,4 @@
 {
-  "parser": "babel-eslint", // https://github.com/babel/babel-eslint,
   "parserOptions": {
     "ecmaVersion": 7,
     "ecmaFeatures": {
@@ -12,7 +11,6 @@
     "browser": true,
     "es6": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "plugins": [
     "react"
   ],
@@ -28,12 +26,10 @@
     "moment": true,
     "alasql": true,
     "process": true,
-    "__DEV__"      : false,
-    "__PROD__"     : false,
-    "__DEBUG__"    : false,
-    "__COVERAGE__" : false,
-    "__BASENAME__" : false
+    "paper": true,
+    "expect": true,
   },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
     "strict": [2, "global"],
     "max-len": [1, 160, 2],
@@ -45,6 +41,7 @@
     "no-case-declarations": 1,
     "no-console": 0,
     "no-extra-semi": 1,
+    "no-prototype-builtins": 0,
     "no-unexpected-multiline": 1,
     "no-useless-escape": 1,
     "no-mixed-spaces-and-tabs": 1,
@@ -52,7 +49,7 @@
     "indent": [0, 2, { "SwitchCase": 1 }],
     "react/prop-types": 1,
     "react/display-name": 1,
-    "generator-star-spacing": 0,
-    "jsx-a11y/href-no-hash": 0
+    "react/no-find-dom-node": 1,
+    "react/jsx-key": 1,
   }
 }

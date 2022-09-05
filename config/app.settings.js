@@ -1,34 +1,41 @@
+
 /**
  * ### При установке параметров сеанса
  * Процедура устанавливает параметры работы программы при старте веб-приложения
  *
  * @param prm {Object} - в свойствах этого объекта определяем параметры работы программы
  */
-module.exports = function settings(prm) {
 
-  if(!prm) {
-    prm = {};
-  };
+const is_node = typeof process !== 'undefined' && process.versions && process.versions.node;
 
-  const couch_path = typeof location === 'undefined' ?
-    'https://dh4.oknosoft.ru:211/fl_'
-    :
-    Object.assign(new URL(location), {pathname: '/couchdb/fl_', search: '', hash: ''}).href;
-  //const couch_path = 'http://fl211:5984/fl_';
+module.exports = function settings(prm = {}) {
+
+  Object.defineProperties(prm, {
+    use_google_geo: {
+      get() {
+        return '';
+      }
+    }
+  });
 
   return Object.assign(prm, {
 
+    is_node,
+
+    //base: process.env.NODE_ENV === 'production' ? '/light' : '',
+    base: '',
+
     // разделитель для localStorage
-    local_storage_prefix: 'fl_',
+    local_storage_prefix: 'www_',
 
     // гостевые пользователи для демо-режима
     guests: [],
 
     // расположение couchdb для сайта
-    couch_path,
+    couch_path: process.env.COUCHPATH || "/couchdb/www_",
 
     // расположение couchdb для nodejs
-    couch_local: process.env.COUCH_LOCAL || couch_path,
+    couch_local: process.env.COUCHLOCAL || 'http://cou221:5984/ww_',
 
     // по умолчанию, используем прямое обращение к couchdb, а не базы браузера
     couch_direct: true,
@@ -61,9 +68,17 @@ module.exports = function settings(prm) {
     // геокодер может пригодиться
     use_ip_geo: true,
 
-    // карты google не используем
-    use_google_geo: '',
+    //
+    keys: {
+      geonames: 'oknosoft',
+    },
 
+  }, is_node && {
+    // авторизация couchdb
+    user_node: {
+      username: process.env.DBUSER || 'admin',
+      password: process.env.DBPWD || 'admin',
+    },
   });
 
 };
