@@ -1,17 +1,17 @@
 import React from 'react';
-import IconChart from '@material-ui/icons/InsertChart';
-import IconDoc from '@material-ui/icons/EventNote';
-import IconInfo from '@material-ui/icons/Info';
-import IconPerson from '@material-ui/icons/Person';
-import IconSettings from '@material-ui/icons/Settings';
-import LibraryBooks from '@material-ui/icons/LibraryBooks';
-import FiberNew from '@material-ui/icons/FiberNew';
-import IconDownload from '@material-ui/icons/CloudDownload';
-import IconHelp from '@material-ui/icons/Help';
-import IconAccessibility from '@material-ui/icons/AccessibilityNew';
+import IconChart from '@mui/icons-material/InsertChart';
+import IconDoc from '@mui/icons-material/EventNote';
+import IconInfo from '@mui/icons-material/Info';
+import IconPerson from '@mui/icons-material/Person';
+import IconSettings from '@mui/icons-material/Settings';
+import LibraryBooks from '@mui/icons-material/LibraryBooks';
+import FiberNew from '@mui/icons-material/FiberNew';
+import IconDownload from '@mui/icons-material/CloudDownload';
+import IconHelp from '@mui/icons-material/Help';
+import IconAccessibility from '@mui/icons-material/AccessibilityNew';
 // import Flask from '../../styles/icons/Flask';
-// import IconDrafts from '@material-ui/icons/Drafts';
-// import IconList from '@material-ui/icons/List';
+// import IconDrafts from '@mui/icons-material/Drafts';
+// import IconList from '@mui/icons-material/List';
 
 const items = [
   {

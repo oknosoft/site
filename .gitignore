@@ -19,7 +19,7 @@
 /build
 /scripts/stats.json
 /.eslintcache
-/src/public/data/
+/public/data/
 /server/mdm/cache/
 !/server/mdm/cache/.gitkeep
 

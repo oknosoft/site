@@ -1,44 +1,22 @@
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
-import teal from '@material-ui/core/colors/blueGrey';
+import {createTheme} from '@mui/material';
+import primary from '@mui/material/colors/blueGrey';
 
+const theme = createTheme({
 
-const theme = createMuiTheme({
-
+  // Purple and green play nicely together.
   palette: {
-    primary: teal, // Purple and green play nicely together.
+    primary,
   },
 
-  mixins: {
-    toolbar: {
-      minHeight: 48,
-    }
+  components: {
+    // Name of the component️
+    MuiButtonBase: {
+      defaultProps: {
+        // The props to apply
+        disableRipple: true, // No more ripple, on the whole application
+      },
+    },
   },
-
-  custom: {
-    appbar: {
-      position: 'fixed',
-    }
-  },
-
-  typography: {
-    useNextVariants: true,
-    h6: {
-      fontWeight: 400,
-    }
-  },
-
-  // overrides: {
-  //   MuiToolbar: {
-  //     root: {
-  //       minHeight: 48,
-  //     },
-  //   },
-  //   MuiAppBar: {
-  //     root: {
-  //       backgroundColor: colors.lightBlack,
-  //     }
-  //   },
-  // },
 
 });
 

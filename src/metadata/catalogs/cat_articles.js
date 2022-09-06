@@ -6,12 +6,12 @@
  * Created by Evgeniy Malyarov on 20.04.2018.
  */
 
-import EditorArticle from '../../components/Articles/Editor';
+//import EditorArticle from '../../components/Articles/Editor';
 
 export default function ({cat, CatArticles}) {
 
   // подключаем особую форму объекта
-  cat.articles.FrmObj = EditorArticle;
+  //cat.articles.FrmObj = EditorArticle;
 
   // реквизит поиска по строке
   cat.articles.build_search = function (tmp, tObj) {
