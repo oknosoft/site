@@ -1,5 +1,6 @@
 /**
- * Кластер серверов
+ * Кластер общих данных
+ * Используется не совсем по назначению - для единообразия с кластером auth-proxy а так же, для перезапуска по аварии
  *
  * @module index
  *
@@ -11,15 +12,14 @@ const worker = require('./worker'),
   runtime = {
     cluster: require('cluster'),
     root: __dirname,
+    common: true,
   },
-  {RateLimiterClusterMaster} = require('rate-limiter-flexible'),
-  conf = require('../config/app.settings')(),
-  log = require('./logger')(runtime);
+  conf = require('../../config/app.settings')(),
+  log = require('../logger')(runtime);
 
 if (runtime.cluster.isMaster) {
 
-  const cpus = conf.workers.count || require('os').cpus().length;
-  const common = conf.server.start_common && require('child_process').fork('server/ram/index', {env: process.env});
+  const cpus = 1;
   let workers = [];
 
   // On worker die
@@ -33,16 +33,9 @@ if (runtime.cluster.isMaster) {
     workers.push(runtime.cluster.fork());
   });
 
-  process.on('exit', (code) => {
-    common && common.kill();
-  });
-
-  fs.watch(require.resolve('../config/app.settings'), (event, filename) => {
+  fs.watch(require.resolve('../../config/app.settings'), (event, filename) => {
     _restart('Config changed');
   });
-
-  // Doesn't require any options, it is only storage and messages handler
-  new RateLimiterClusterMaster();
 
   // Fork workers
   for (let i = 0; i < cpus; i++) {

@@ -1,6 +1,6 @@
 {
   "name": "oknosoft",
-  "version": "2.0.30-beta.10",
+  "version": "101",
   "description": "site oknosoft",
   "repository": {
     "type": "git",
@@ -26,19 +26,28 @@
     "url": "https://github.com/oknosoft/site/issues"
   },
   "homepage": "https://oknosoft.ru/",
-  "proxy": "https://develop.ecookna.ru/",
+  "proxy": "http://localhost:3033/",
   "proxy1": "https://develop.ecookna.ru/",
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.4",
-    "history": "^5.3.0",
+    "fetch-cookie": "^1.0",
+    "history": "^5.3",
+    "http-proxy": "^1.18",
+    "marked": "^4.1",
+    "md5-file": "^5.0",
+    "merge2": "^1.4",
     "metadata-core": "2.0.30-beta.10",
     "metadata-pouchdb": "2.0.30-beta.10",
-    "react-router-dom": "^6.3.0",
-    "react-share": "^4.4.0",
-    "url-join": "^5.0.0"
+    "node-fetch": "2.6.7",
+    "rate-limiter-flexible": "^2.3",
+    "react-router-dom": "^6.3",
+    "react-share": "^4.4",
+    "serve-handler": "^6.1",
+    "unzipper": "^0.10.11",
+    "url-join": "^5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

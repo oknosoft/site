@@ -28,10 +28,10 @@ module.exports = function (proxy, allowedHost) {
     // While we're investigating better solutions, for now we will take a
     // compromise. Since our WDS configuration only serves files in the `public`
     // folder we won't consider accessing them a vulnerability. However, if you
-    // use the `proxy` feature, it gets more dangerous because it can expose
+    // use the `superlogin_proxy` feature, it gets more dangerous because it can expose
     // remote code execution vulnerabilities in backends like Django and Rails.
     // So we will disable the host check normally, but enable it if you have
-    // specified the `proxy` setting. Finally, we let you override it if you
+    // specified the `superlogin_proxy` setting. Finally, we let you override it if you
     // really know what you're doing with a special environment variable.
     // Note: ["localhost", ".localhost"] will support subdomains - but we might
     // want to allow setting the allowedHosts manually for more complex setups
@@ -99,7 +99,7 @@ module.exports = function (proxy, allowedHost) {
       disableDotRule: true,
       index: paths.publicUrlOrPath,
     },
-    // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
+    // `superlogin_proxy` is run between `before` and `after` `webpack-dev-server` hooks
     proxy,
     onBeforeSetupMiddleware(devServer) {
       // Keep `evalSourceMapMiddleware`
@@ -108,7 +108,7 @@ module.exports = function (proxy, allowedHost) {
       devServer.app.use(evalSourceMapMiddleware(devServer));
 
       if (fs.existsSync(paths.proxySetup)) {
-        // This registers user provided middleware for proxy reasons
+        // This registers user provided middleware for superlogin_proxy reasons
         require(paths.proxySetup)(devServer.app);
       }
     },

@@ -5,21 +5,11 @@
 const path = require('path');
 const fs = require('fs');
 const md5File = require('md5-file');
-const {appWebpackCache} = require('../config/paths');
-
 const localNodeModules = path.resolve(__dirname, '../node_modules');
+const remoteNodeModules = '..\\metadata\\packages';
 const {dependencies} = require(path.resolve(__dirname, '../package.json'));
-
-// накапливаем пути
-const repos = [];
-
-for(const local of Object.keys(dependencies).filter(v => /^metadata-/.test(v))) {
-  repos.push({
-    local,
-    remote: `..\\metadata\\packages\\${local}`,
-    dir: '',
-  });
-}
+const libs = Object.keys(dependencies).filter(v => /^metadata-/.test(v));
+//libs.push('docdash');
 
 function fromDir(startPath, filter, callback) {
 
@@ -45,13 +35,12 @@ function fromDir(startPath, filter, callback) {
   };
 };
 
-// исполняем
 let copied;
-for(const {local, remote, dir} of repos) {
-  const lpath = path.resolve(localNodeModules, local, dir);
-  const rpath = path.resolve(remote, dir);
+for (const lib of libs) {
+  const lpath = path.resolve(localNodeModules, lib);
+  const rpath = lib === 'docdash' ?  path.resolve('../', lib) : path.resolve(remoteNodeModules, lib);
   let i = 0;
-  fromDir(rpath, /\.(css|js|mjs|md|map|gif|png|ts)$/, (rname, isDir) => {
+  fromDir(rpath, /\.(css|js|mjs|md|map|tmpl)$/, (rname, isDir) => {
     const name = rname.replace(rpath, '');
     const lame = path.join(lpath, name);
     if(isDir) {
@@ -69,12 +58,6 @@ for(const {local, remote, dir} of repos) {
     console.log(`from ${rpath} written ${i} files`);
   }
 }
-
-
-if(copied){
-  // чистим cache webpack
-  fs.rm(appWebpackCache, {recursive: true, force: true}, () => null);
-}
-else {
+if(!copied){
   console.log(`all files match`);
 }
