@@ -4,7 +4,7 @@
  * Created by Evgeniy Malyarov on 14.02.2021.
  */
 
-import {load_ram} from '../../packages/proxy';
+import {load_ram} from '../../packages/superlogin-proxy';
 
 export const init_state = {
   meta_loaded: false,
@@ -15,7 +15,8 @@ export const init_state = {
   idle: false,
   page: {},
   offline: false,
-  title: 'Заказ дилера',
+  title: 'Окнософт',
+  menu_open: window.innerWidth > 960,
   error: null,
   user: {
     logged_in: false,
@@ -60,7 +61,7 @@ export function actions(elm) {
       const {classes: {PouchDB}, adapters: {pouch}, job_prm, md, ui, cat: {users}} = $p;
       elm.setState({common_loaded: true});
       const {handleNavigate, handleIfaceState} = elm;
-      ui.dialogs.init({handleIfaceState, handleNavigate, lazy});
+      //ui.dialogs.init({handleIfaceState, handleNavigate, {}});
 
       pouch.on({
         pouch_complete_loaded() {
@@ -107,14 +108,7 @@ export function actions(elm) {
       });
 
       md.once('predefined_elmnts_inited', () => {
-        // шаблоны грузим в озу сразу
-        const {templates_nested} = job_prm.builder;
         let res = Promise.resolve();
-        if(templates_nested && templates_nested.length) {
-          for (const tmp of templates_nested) {
-            res = res.then(() => tmp.load_templates());
-          }
-        }
         res.then(() => pouch.emit('pouch_complete_loaded'));
       });
 

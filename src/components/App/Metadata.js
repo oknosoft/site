@@ -42,10 +42,6 @@ class Metadata extends React.Component {
     handleNavigate(url);
   }
 
-  handleDialogClose = (name) => {
-    this.handleIfaceState({name, value: {open: false}});
-  };
-
   componentDidMount() {
     // инициализируем MetaEngine
     actions(this);
@@ -53,7 +49,7 @@ class Metadata extends React.Component {
 
 
   render() {
-    const {props: {App}, state, handleIfaceState, handleDialogClose} = this;
+    const {props: {App}, state, handleIfaceState} = this;
     const {...othes} = state;
 
     Object.assign(othes, {handlers: {handleIfaceState, handleNavigate, handleEdit}});

@@ -4,7 +4,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 export default function LinearBuffer() {
   const [progress, setProgress] = React.useState(0);
-  const [buffer, setBuffer] = React.useState(10);
+  const [buffer, setBuffer] = React.useState(12);
 
   const progressRef = React.useRef(() => {});
   React.useEffect(() => {
@@ -13,7 +13,7 @@ export default function LinearBuffer() {
         setProgress(0);
         setBuffer(10);
       } else {
-        const diff = Math.random() * 10;
+        const diff = Math.random() * 9;
         const diff2 = Math.random() * 10;
         setProgress(progress + diff);
         setBuffer(progress + diff + diff2);
@@ -24,7 +24,7 @@ export default function LinearBuffer() {
   React.useEffect(() => {
     const timer = setInterval(() => {
       progressRef.current();
-    }, 500);
+    }, 300);
 
     return () => {
       clearInterval(timer);

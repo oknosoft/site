@@ -8,6 +8,12 @@ const theme = createTheme({
     primary,
   },
 
+  mixins: {
+    toolbar: {
+      minHeight: 50,
+    }
+  },
+
   components: {
     // Name of the component️
     MuiButtonBase: {
@@ -16,6 +22,7 @@ const theme = createTheme({
         disableRipple: true, // No more ripple, on the whole application
       },
     },
+
   },
 
 });

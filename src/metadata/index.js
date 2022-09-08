@@ -2,14 +2,16 @@
 // конструктор metadata.js
 import MetaEngine from 'metadata-core';
 import plugin_pouchdb from 'metadata-pouchdb';
+//import plugin_ui from 'metadata-abstract-ui';
+//import plugin_ui_tabulars from 'metadata-abstract-ui/tabulars';
 import plugin_mime from 'metadata-core/lib/mime.min';
-import proxy_login, {load_common} from '../packages/proxy';
+import proxy_login, {load_common} from '../packages/superlogin-proxy';
 
 // функция установки параметров сеанса
 import settings from '../../config/app.settings';
 
 // читаем скрипт инициализации метаданных, полученный в результате выполнения meta:prebuild
-import {meta_init} from './init';
+import meta_init from './init';
 import modifiers from './modifiers';
 
 

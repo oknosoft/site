@@ -1,3 +1,3 @@
-import AppView from './AppView';
+import AppView from './AppView.js';
 
 export default AppView;

@@ -26,7 +26,9 @@ exports.CchPredefined_elmntsManager = class CchPredefined_elmntsManager extends 
     });
   }
 
-  // этот метод адаптер вызывает перед загрузкой doc_ram
+  /**
+   * этот метод адаптер вызывает перед загрузкой doc_ram
+   */
   job_prms() {
 
     // создаём константы из alatable
@@ -36,60 +38,96 @@ exports.CchPredefined_elmntsManager = class CchPredefined_elmntsManager extends 
     // const {job_prm: {properties}} = this._owner.$p;
   }
 
-  // создаёт константу
+  /**
+   * создаёт константу
+   * @param row
+   */
   job_prm(row) {
     const {job_prm, md, utils} = this._owner.$p;
     const {parents} = this;
     const parent = job_prm[parents[row.parent.valueOf()]];
     const _mgr = row.type.is_ref && md.mgr_by_class_name(row.type.types[0]);
 
-    if(row.list == -1) {
-
-      parent.__define(row.synonym, {
-        value: (() => {
-          const res = {};
-          row.elmnts.forEach((row) => {
-            res[row.elm] = _mgr ? _mgr.get(row.value, false, false) : row.value;
-          });
-          return res;
-        })(),
-        enumerable: true
-      });
-
-    }
-    else if(row.list) {
-
-      parent.__define(row.synonym, {
-        value: (row.elmnts._obj || row.elmnts).map((row) => {
-          if(_mgr) {
-            const value = _mgr.get(row.value, false, false);
-            if(!utils.is_empty_guid(row.elm)) {
-              value._formula = row.elm;
-            }
-            return value;
-          }
-          else {
-            return row.value;
-          }
-        }),
-        enumerable: true
-      });
-    }
-    else {
-
+    if(parent) {
+      if(parent.synonym === 'lists' || !row.synonym) {
+        return;
+      }
       if(parent.hasOwnProperty(row.synonym)) {
         delete parent[row.synonym];
       }
 
-      parent.__define(row.synonym, {
-        value: _mgr ? _mgr.get(row.value, false, false) : row.value,
-        configurable: true,
-        enumerable: true
+      if(row.list == -1) {
+        parent.__define(row.synonym, {
+          value: (() => {
+            const res = {};
+            (row.elmnts._obj || row.elmnts).forEach(({elm, value}) => {
+              if(elm !== undefined) {
+                res[elm.valueOf()] = _mgr ? _mgr.get(value, false, false) : value;
+              }
+            });
+            return res;
+          })(),
+          configurable: true,
+          enumerable: true,
+          writable: true,
+        });
+      }
+      else if(row.list) {
+        parent.__define(row.synonym, {
+          value: (row.elmnts._obj || row.elmnts).map((row) => {
+            if(_mgr) {
+              const value = _mgr.get(row.value, false, false);
+              if(!utils.is_empty_guid(row.elm)) {
+                value._formula = row.elm;
+              }
+              return value;
+            }
+            else {
+              return row.value;
+            }
+          }),
+          configurable: true,
+          enumerable: true,
+          writable: true,
+        });
+      }
+      else if(row.predefined_name === 'abonent') {
+        const {by_ref} = this;
+        row.elmnts.forEach((row) => {
+          const property = by_ref[row.property];
+          if(!property || !property.predefined_name) return;
+          const _mgr = property.type.is_ref && md.mgr_by_class_name(property.type.types[0]);
+          parent.__define(property.predefined_name, {
+            value: _mgr ? _mgr.get(row.value, false, false) : row.value,
+            configurable: true,
+            enumerable: true,
+            writable: true,
+          });
+        });
+      }
+      else {
+        parent.__define(row.synonym, {
+          value: _mgr ? _mgr.get(row.value, false, false) : row.value,
+          configurable: true,
+          enumerable: true,
+          writable: true,
+        });
+      }
+    }
+    else {
+      $p.record_log({
+        class: 'error',
+        note: `no parent for ${row.synonym}`,
       });
     }
   }
 
-  // переопределяем load_array
+  /**
+   * переопределяем load_array
+   * @param aattr {Array.<Object>}
+   * @param [forse] {Boolean}
+   * @override
+   */
   load_array(aattr, forse) {
     const {job_prm} = this._owner.$p;
     const {parents} = this;
@@ -102,14 +140,18 @@ exports.CchPredefined_elmntsManager = class CchPredefined_elmntsManager extends 
       }
       // если не задан синоним - пропускаем
       else if(row.synonym) {
+        const parent = parents[row.parent];
         // если есть подходящая папка, стразу делаем константу
-        if(parents[row.parent]) {
+        if(parent && parent.synonym !== 'lists') {
           !job_prm[parents[row.parent]][row.synonym] && this.job_prm(row);
         }
         // если папки нет - сохраним элемент в alatable
         else {
           elmnts.push(row);
         }
+      }
+      else {
+        elmnts.push(row);
       }
     }
     // метод по умолчанию
@@ -180,8 +222,6 @@ exports.CchPredefined_elmnts = class CchPredefined_elmnts extends Object {
   set synonym(v){this._setter('synonym',v)}
   get list(){return this._getter('list')}
   set list(v){this._setter('list',v)}
-  get zone(){return this._getter('zone')}
-  set zone(v){this._setter('zone',v)}
   get predefined_name(){return this._getter('predefined_name')}
   set predefined_name(v){this._setter('predefined_name',v)}
   get parent(){return this._getter('parent')}
