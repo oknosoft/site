@@ -8,72 +8,33 @@
 
 //import EditorArticle from '../../components/Articles/Editor';
 
-export default function ({cat, CatArticles}) {
+exports.CatArticlesManager = class CatArticlesManager extends Object {
 
-  // подключаем особую форму объекта
-  //cat.articles.FrmObj = EditorArticle;
+  constructor(owner, class_name) {
+    super(owner, class_name);
+    this._aliases = {};
+    this._tags = new Map();
+  }
 
   // реквизит поиска по строке
-  cat.articles.build_search = function (tmp, tObj) {
+  build_search(tmp, tObj) {
     tmp.search = (tObj.name + ' ' + tObj.id).toLowerCase();
-  };
+  }
 
-  // модифицируем работу с табчастью тегов
-  const {prototype} = CatArticles;
-  delete prototype.tags;
-  delete prototype.acl;
-  Object.defineProperties(prototype, {
-    tags: {
-      get() {
-        const {tags} = this._obj;
-        return Array.isArray(tags) ? tags : [];
-      },
-      set(v) {
-        const {_obj} = this;
-        if(!Array.isArray(v)) {
-          v = [];
-        }
-        if(_obj.tags !== v) {
-          this.__notify('tags');
-          if(_obj.tags) {
-            _obj.tags.length = 0;
-            _obj.tags.push.apply(_obj.tags, v);
-          }
-          else {
-            _obj.tags = v;
-          }
-        }
+  load_array(aattr, forse) {
+    const arr = super.load_array(aattr, forse);
+    for(const o of arr) {
+      this._aliases[o.id] = o;
+      for(const {url} of o.aliases) {
+        this._aliases[url] = o;
       }
-    },
-    acl: {
-      get() {
-        const {acl} = this._obj;
-        return Array.isArray(acl) ? acl : [];
-      },
-      set(v) {
-        const {_obj} = this;
-        if(!Array.isArray(v)) {
-          v = [];
+      for(const {tag} of o.tags) {
+        if(!this._tags.has(tag)) {
+          this._tags.set(tag, []);
         }
-        if(_obj.acl !== v) {
-          this.__notify('acl');
-          if(_obj.acl) {
-            _obj.acl.length = 0;
-            _obj.acl.push.apply(_obj.acl, v);
-          }
-          else {
-            _obj.acl = v;
-          }
-        }
-      }
-    },
-    after_create: {
-      value() {
-        this.acl = ['_anonymous'];
-        this.date = new Date();
-        this.author = $p.current_user;
-        return this;
+        this._tags.get(tag).push(o);
       }
     }
-  });
+    return arr;
+  }
 }

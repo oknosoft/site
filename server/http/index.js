@@ -18,6 +18,7 @@ module.exports = function ($p, log, worker) {
   const couchdbProxy = require('./proxy-couchdb')($p, log);
   const commonProxy = require('./proxy-common');
   const staticProxy = require('./static');
+  const articles = require('../articles')($p, log);
   const adm = require('./adm')($p, log);
   const mdm = require('../mdm')($p, log);
   const auth = require('../auth')($p, log);
@@ -63,7 +64,7 @@ module.exports = function ($p, log, worker) {
         parsed.is_log = parsed.paths[0] === 'couchdb' && /_log$/.test(parsed.paths[1]);
         parsed.is_event_source = parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'events';
         parsed.is_common = (parsed.paths[0] === 'common') || (parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'common');
-        parsed.is_static = !parsed.paths[0] || parsed.paths[0].includes('.') || /^(light|dist|static|imgs|index|builder|about|login|settings|b|o|help)$/.test(parsed.paths[0]);
+        parsed.is_static = !parsed.paths[0] || parsed.paths[0].includes('.') || /^(dist|static|imgs|index)$/.test(parsed.paths[0]);
         req.query = qs.parse(parsed.query);
 
         if(parsed.is_static) {
@@ -71,6 +72,9 @@ module.exports = function ($p, log, worker) {
         }
         if(parsed.is_event_source) {
           return event_source(req, res);
+        }
+        if(await articles(req, res)) {
+          return;
         }
 
         // пытаемся авторизовать пользователя

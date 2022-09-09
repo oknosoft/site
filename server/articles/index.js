@@ -8,43 +8,48 @@ const marked = require('marked');
 const sitemap = require('./sitemap');
 const fs = require('fs');
 
-let pluginFind;
-try {
-  pluginFind = require('superlogin/node_modules/pouchdb-find');
-}
-catch(err) {
-  pluginFind = require('pouchdb-find');
-}
-const PouchDB = require('pouchdb').plugin(pluginFind);
-
 const cache = new Map();
 const timeout = 600000;
 
-module.exports = function (superlogin) {
-
-  // подключимся к базе со статьями
-  const db = new PouchDB(superlogin.couchAuthDB.name.replace(/_users$/, 'fl_0_remote'), {skip_setup: true});
+module.exports = function ({cat: {articles}}, log) {
 
   // вернём роутер
-  return function (req, res, next) {
-    sitemap(req, res, () => index()
-      .then((html) => {
-        const key = req.url.replace(/^\/(articles|files|news)/, '').replace(/^\//, '').split('?')[0];
-        if(!key) {
-          return res.send(html);
-        }
-        doc(db, key)
-          .then((doc) => {
-            res.send(fill(html, doc));
-            if(!doc) {
-              console.error(req.url);
-            }
-          })
-          .catch((err) => {
-            res.send(html);
-            console.error(`${req.url}/n${err}`);
-          });
-      }), db);
+  return async (req, res) => {
+    let {query, path, paths} = req.parsed;
+    path = path.replace(/^\//, '')
+    const slash = path.endsWith('/');
+    if(slash) {
+      path = path.replace(/\/$/, '');
+    }
+    const article = articles._aliases[path];
+    if(article) {
+      if(path !== article.id || slash || query) {
+        res.writeHead(301, {
+          location: `/${article.id}`,
+        });
+        res.end();
+        return true;
+      }
+    }
+
+    // sitemap(req, res, () => index()
+    //   .then((html) => {
+    //     const key = req.url.replace(/^\/(articles|files|news)/, '').replace(/^\//, '').split('?')[0];
+    //     if(!key) {
+    //       return res.send(html);
+    //     }
+    //     doc(db, key)
+    //       .then((doc) => {
+    //         res.send(fill(html, doc));
+    //         if(!doc) {
+    //           console.error(req.url);
+    //         }
+    //       })
+    //       .catch((err) => {
+    //         res.send(html);
+    //         console.error(`${req.url}/n${err}`);
+    //       });
+    //   }), db);
   }
 }
 

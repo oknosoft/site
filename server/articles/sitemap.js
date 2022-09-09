@@ -7,7 +7,7 @@
  */
 
 const xml = require('fs').readFileSync(require.resolve('./sitemap.xml'), 'utf8');
-const ram = require('../../src/metadata/ram');
+const ram = [];
 const selector = {
   selector: {
     class_name: 'cat.articles',
