@@ -24,13 +24,12 @@ class ArticlesRoute extends Component {
     // <Route render={(props) => wraper(Articles, props)}/>
 
     return <Routes>
-      <Route path={`${match.url}/:ref`} element={<Article {...mainProps}/>} />
+      <Route path=":ref" element={<Article {...mainProps}/>} />
     </Routes>;
   }
 }
 
 ArticlesRoute.propTypes = {
-  match: PropTypes.object,
   height: PropTypes.number,
   width: PropTypes.number,
 };

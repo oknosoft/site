@@ -71,8 +71,9 @@ const Space = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-export default function PersistentDrawerLeft({menu_open, handleIfaceState, ...props}) {
+export default function PersistentDrawerLeft({menu_open, ...props}) {
   const theme = useTheme();
+  const {handleIfaceState} = props;
 
   const handleDrawerOpen = () => {
     handleIfaceState({name: 'menu_open', value: true});

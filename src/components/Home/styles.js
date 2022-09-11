@@ -4,8 +4,8 @@ export default function () {
       flex: '1 0 100%',
     },
     hero: {
-      minHeight: '95vh', // Makes the hero full height until we get some more content.
-      backgroundColor: 'eee',
+      minHeight: 'calc(100vh - 196px)', // Makes the hero full height until we get some more content.
+      //backgroundColor: 'eee',
     },
     content: {
       paddingTop: '4vh',
@@ -23,10 +23,10 @@ export default function () {
       marginTop: 18,
     },
     logo: {
-      width: '16vw',
-      height: '16vw',
-      maxWidth: 100,
-      maxHeight: 100,
+      width: '14vw',
+      height: '14vw',
+      maxWidth: 80,
+      maxHeight: 80,
     },
   };
 }

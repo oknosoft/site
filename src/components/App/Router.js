@@ -7,27 +7,38 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom';
 
 import Home from '../Home';
 import ArticlesRoute from '../Articles';
 
-const DataRoute = () => 'DataRoute';
+const DataRoute = (props) => {
+  return 'DataRoute';
+};
 const FrmLogin = () => 'FrmLogin';
+
+function AppRoutes(props) {
+
+  const {classes, ...mainProps} = props;
+  const navigate = useNavigate();
+  mainProps.handleNavigate = (url) => {
+    navigate(url);
+  };
+
+  return <Routes>
+    <Route index element={<Home {...mainProps}/>}/>
+    <Route path=":area(doc|cat|ireg|cch|rep).:name" element={<DataRoute {...mainProps}/>}/>
+    <Route path=":area(login|settings|profile|password-reset)" element={<FrmLogin {...mainProps}/>}/>
+    <Route path="*" element={<ArticlesRoute {...mainProps}/>}/>
+  </Routes>
+}
 
 function AppRouter(props) {
   // const {match, handlers, offline, user} = this.props;
   // const {area, name} = match.params;
 
-  const {classes, ...mainProps} = props;
-
   return <Router>
-    <Routes>
-      <Route exact path="/" element={<Home {...mainProps}/>}/>
-      <Route path="/:area(doc|cat|ireg|cch|rep).:name" element={<DataRoute {...mainProps}/>}/>
-      <Route path="/:area(login|settings|profile|password-reset)" element={<FrmLogin {...mainProps}/>}/>
-      <Route element={<ArticlesRoute {...mainProps}/>}/>
-    </Routes>
+    <AppRoutes {...props} />
   </Router>;
 }
 
