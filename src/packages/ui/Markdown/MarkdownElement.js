@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {useTheme} from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import {marked} from 'marked';
 
-import marked from 'marked';
-
-import classNames from 'classnames';
-import withStyles from './styles';
+import cn from 'classnames';
+import styles from './styles';
 
 export function MarkdownElement(props) {
-  const { classes, className, text, mdtitle, title, handleNavigate, handleIfaceState, CustomBtn, ...other } = props;
+  const { className, text, mdtitle, title, handleNavigate, handleIfaceState, CustomBtn, ...other } = props;
+  const classes = styles(useTheme());
 
   function anchorCkick(evt) {
     if(evt.target.tagName === 'A') {
@@ -24,11 +26,12 @@ export function MarkdownElement(props) {
 
   /* eslint-disable react/no-danger */
   return (
-    <div
-      className={classNames(classes.root, 'markdown-body', className)}
+    <Box
+      className={cn('markdown-body', className)}
+      sx={classes.root}
       onClick={anchorCkick}
       title={mdtitle || title}
-      dangerouslySetInnerHTML={{__html: marked(text)}}
+      dangerouslySetInnerHTML={{__html: marked.parse(text)}}
       {...other}
     />
   );
@@ -36,11 +39,9 @@ export function MarkdownElement(props) {
 }
 
 MarkdownElement.propTypes = {
-  classes: PropTypes.object.isRequired,
   className: PropTypes.string,
   text: PropTypes.string.isRequired,
   handleNavigate: PropTypes.func.isRequired,
-
 }
 
-export default withStyles(MarkdownElement);
+export default MarkdownElement;

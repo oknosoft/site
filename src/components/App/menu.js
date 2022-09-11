@@ -13,6 +13,9 @@ import IconAccessibility from '@mui/icons-material/AccessibilityNew';
 // import IconDrafts from '@mui/icons-material/Drafts';
 // import IconList from '@mui/icons-material/List';
 
+import description from '../../../server/articles/description';
+export {description};
+
 const items = [
   {
     text: 'Новости',
@@ -129,7 +132,5 @@ export function item_props(path) {
   }
   return res || {};
 }
-
-export const description = 'Сайт для владельцев и руководителей о решении проблем управления бизнесом';
 
 export default items;

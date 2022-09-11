@@ -8,8 +8,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import {useTheme} from '@mui/material/styles';
 
 // https://github.com/nygardk/react-share/blob/master/demo/Demo.jsx
 import {
@@ -18,117 +19,97 @@ import {
   // VKShareCount,
   // OKShareCount,
 
-  FacebookShareButton,
-  TwitterShareButton,
-  GooglePlusShareButton,
   VKShareButton,
   OKShareButton,
   TelegramShareButton,
-  //WhatsappShareButton,
+  WhatsappShareButton,
   MailruShareButton,
   EmailShareButton,
 
-  FacebookIcon,
-  TwitterIcon,
-  GooglePlusIcon,
+
   VKIcon,
   OKIcon,
   TelegramIcon,
-  //WhatsappIcon,
+  WhatsappIcon,
   MailruIcon,
   EmailIcon,
 } from 'react-share';
 
-const styles = theme => ({
-  share: {
-    cursor: 'pointer',
-    '&:hover:not(:active)': {
-      opacity: 0.75
-    },
-    display: 'inline-block',
-    marginTop: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+const share = {
+  cursor: 'pointer',
+  '&:hover:not(:active)': {
+    opacity: 0.75
   },
-  root: {
-    marginTop: theme.spacing.unit * 2,
-  }
-});
+  display: 'inline-block',
+  marginTop: 8,
+  marginRight: 8
+};
+
+function ShareButton({Component, ...props}) {
+  return <Box sx={share}><Component {...props}/></Box>;
+}
 
 function Social(props) {
 
   const {title, classes} = props;
   const {href} = location;
-
-  /*
-  <WhatsappShareButton
-    url={href}
-    title={title}
-    separator=":: "
-    className={classes.share}>
-    <WhatsappIcon size={32} round />
-  </WhatsappShareButton>
-  */
+  const theme = useTheme();
 
   return (
-    <div key="share" className={classes.root}>
+    <Box mt={theme.spacing(2)}>
       <Typography variant="h6" component="h3" color="primary">Поделиться ссылкой:</Typography>
-      <FacebookShareButton
-        url={href}
-        quote={title}
-        className={classes.share}>
-        <FacebookIcon size={32} round />
-      </FacebookShareButton>
-      <TwitterShareButton
+      <ShareButton
+        Component={WhatsappShareButton}
         url={href}
         title={title}
+        separator=":: "
         className={classes.share}>
-        <TwitterIcon size={32} round />
-      </TwitterShareButton>
-      <TelegramShareButton
+        <WhatsappIcon size={32} round />
+      </ShareButton>
+      <ShareButton
+        Component={TelegramShareButton}
         url={href}
         title={title}
         className={classes.share}>
         <TelegramIcon size={32} round />
-      </TelegramShareButton>
-      <GooglePlusShareButton
-        url={href}
-        className={classes.share}>
-        <GooglePlusIcon size={32} round />
-      </GooglePlusShareButton>
-      <VKShareButton
+      </ShareButton>
+      <ShareButton
+        Component={VKShareButton}
         url={href}
         windowWidth={660}
         windowHeight={460}
         className={classes.share}>
         <VKIcon size={32} round />
-      </VKShareButton>
-      <OKShareButton
+      </ShareButton>
+      <ShareButton
+        Component={OKShareButton}
         url={href}
         windowWidth={660}
         windowHeight={460}
         className={classes.share}>
         <OKIcon size={32} round />
-      </OKShareButton>
-      <MailruShareButton
+      </ShareButton>
+      <ShareButton
+        Component={MailruShareButton}
         url={href}
         title={title}
         className={classes.share}>
         <MailruIcon size={32} round />
-      </MailruShareButton>
-      <EmailShareButton
+      </ShareButton>
+      <ShareButton
+        Component={EmailShareButton}
         url={href}
         subject={title}
         body={href}
         className={classes.share}>
         <EmailIcon size={32} round />
-      </EmailShareButton>
-    </div>
+      </ShareButton>
+    </Box>
   );
 }
 
 Social.propTypes = {
-  classes: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(Social);
+export default Social;

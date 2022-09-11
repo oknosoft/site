@@ -1,11 +1,11 @@
-export default function (theme) {
+export default function () {
   return {
     root: {
       flex: '1 0 100%',
     },
     hero: {
       minHeight: '95vh', // Makes the hero full height until we get some more content.
-      backgroundColor: theme.palette.grey[100],
+      backgroundColor: 'eee',
     },
     content: {
       paddingTop: '4vh',
@@ -16,11 +16,11 @@ export default function (theme) {
       cursor: 'pointer',
     },
     news: {
-      paddingLeft: theme.spacing.unit * 2,
+      paddingLeft: 16,
       paddingTop: '4vh',
     },
     button: {
-      marginTop: theme.spacing.unit * 3,
+      marginTop: 18,
     },
     logo: {
       width: '16vw',

@@ -1,23 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Helmet} from 'react-helmet';
-import {styled, useTheme} from '@mui/material/styles';
-import Typography from '@material-ui/core/Typography';
+import Helmet from 'react-helmet';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import MarkdownElement from './MarkdownElement';
 import {getContents, getTitle} from './parseMarkdown';
-
-export const styles = {
-  root: {
-    marginBottom: 100,
-  },
-  header: {
-    display: 'flex',
-  },
-  width: {
-    width: '100%',
-  }
-};
 
 export function MarkdownDocs(props) {
   const {classes, markdown, subtitle, title, htitle, h1, img,
@@ -34,7 +22,7 @@ export function MarkdownDocs(props) {
   }
 
   return (
-    <div className={classes.root}>
+    <Box mb={100}>
       <Helmet title={ltitle}>
         <meta name="description" content={descr || h1} />
         {canonical && <link rel="canonical" href={canonical} />}
@@ -44,10 +32,10 @@ export function MarkdownDocs(props) {
       </Helmet>
 
       {
-        h1 && <div className={classes.header}>
-          <Typography key="h1" variant="h4" component="h1" color="primary" className={classes.width}>{h1}</Typography>
+        h1 && <Box sx={{display: 'flex'}}>
+          <Typography key="h1" variant="h4" component="h1" color="primary" sx={{width: '100%'}}>{h1}</Typography>
           {TopButton}
-        </div>
+        </Box>
       }
 
       {contents.map(content => <MarkdownElement
@@ -61,13 +49,11 @@ export function MarkdownDocs(props) {
       {
         footer
       }
-
-    </div>
+    </Box>
   );
 }
 
 MarkdownDocs.propTypes = {
-  classes: PropTypes.object.isRequired,
   markdown: PropTypes.string.isRequired,
   title: PropTypes.string,              // заголовок в табе браузера
   subtitle: PropTypes.string,           // суффикс проекта в заголовке
@@ -76,4 +62,4 @@ MarkdownDocs.propTypes = {
   footer: PropTypes.node,               // кнопки share соцсетей, прочие элементы в подвале
 }
 
-export default styled(styles)(MarkdownDocs);
+export default MarkdownDocs;

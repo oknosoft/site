@@ -1,26 +1,25 @@
-// @flow
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Hidden from '@material-ui/core/Hidden';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Hidden from '@mui/material/Hidden';
+import Box from '@mui/material/Box';
 import Helmet from 'react-helmet';
 import AppFooter from './Footer';
 import Flask from '../../styles/icons/Flask';
-import Accessibility from '@material-ui/icons/AccessibilityNew';
-import LibraryBooks from '@material-ui/icons/LibraryBooks';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-//import Timer from '@material-ui/icons/Timer';
-import InfiniteArticles from '../Articles/MUiArticles';
+import Accessibility from '@mui/icons-material/AccessibilityNew';
+import LibraryBooks from '@mui/icons-material/LibraryBooks';
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
+//import Timer from '@mui/icons-material/Timer';
+//import InfiniteArticles from '../Articles/MUiArticles';
 import {fromQuery} from '../Articles/queryString';
 
 import {description} from '../App/menu';
 
 import styles from './styles';
 
-const ltitle = 'Программирование бизнеса';
+const ltitle = 'Окнософт';
 
 class PageHome extends React.Component {
 
@@ -29,6 +28,7 @@ class PageHome extends React.Component {
     this.tags = [];
     this.tagList = [];
     this.tagFilter = [];
+    this.classes = styles();
     this.shouldComponentUpdate(props);
   }
 
@@ -50,12 +50,12 @@ class PageHome extends React.Component {
   }
 
   render() {
-    const {classes, handleNavigate, match, location} = this.props;
+    const {classes, props:{handleNavigate, match, location}} = this;
     const {tags, tagList, tagFilter} = this;
     const prm = fromQuery();
 
     return (
-      <div className={classes.root}>
+      <Box sx={classes.root}>
 
         <Helmet title={ltitle}>
           <meta name="description" content={description} />
@@ -63,18 +63,18 @@ class PageHome extends React.Component {
           <meta property="og:description" content={description} />
         </Helmet>
 
-        <Grid container className={classes.hero} spacing={8}>
+        <Grid container sx={classes.hero} spacing={8}>
 
           <Grid item sm={12} lg={5}>
             <Grid container alignItems="stretch" direction="column" justify="space-around">
 
               <Grid item>
-                <Grid container className={classes.menu} spacing={16} wrap="nowrap" onClick={() => handleNavigate('/articles/products')}>
+                <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => handleNavigate('/articles/products')}>
                   <Hidden smDown><Grid item xs={1}/></Hidden>
                   <Grid item>
-                    <ShoppingBasket alt="Продукты" className={classes.logo} color="disabled"/>
+                    <ShoppingBasket alt="Продукты" sx={classes.logo} color="disabled"/>
                   </Grid>
-                  <Grid item className={classes.content}>
+                  <Grid item sx={classes.content}>
                     <Typography variant="h5" component="h2">Продукты</Typography>
                     <Typography color="textSecondary">Что у нас можно купить</Typography>
                   </Grid>
@@ -82,92 +82,46 @@ class PageHome extends React.Component {
               </Grid>
 
               <Grid item>
-                <Grid container className={classes.menu} spacing={16} wrap="nowrap" onClick={() => handleNavigate('/contents/')}>
+                <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => handleNavigate('/contents/')}>
                   <Hidden smDown><Grid item xs={1}/></Hidden>
                   <Grid item>
-                    <LibraryBooks alt="Статьи" className={classes.logo} color="disabled"/>
+                    <LibraryBooks alt="Статьи" sx={classes.logo} color="disabled"/>
                   </Grid>
-                  <Grid item className={classes.content}>
-                    <Typography variant="h5" component="h2">Статьи и книги</Typography>
+                  <Grid item sx={classes.content}>
+                    <Typography variant="h5" component="h2">Статьи</Typography>
                     <Typography color="textSecondary">
-                      Методические материалы, кейсы и технический блог
+                      Методические материалы и технический блог
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
 
               <Grid item>
-                <Grid container className={classes.menu} spacing={16} wrap="nowrap" onClick={() => handleNavigate('/flowcon/diagram')}>
+                <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => handleNavigate('/flowcon/diagram')}>
                   <Hidden smDown><Grid item xs={1}/></Hidden>
                   <Grid item>
-                    <Flask alt="Flowcon Logo" className={classes.logo} color="disabled"/>
+                    <Flask alt="Flowcon Logo" sx={classes.logo} color="disabled"/>
                   </Grid>
-                  <Grid item className={classes.content}>
-                    <Typography variant="h5" component="h2">Flowcon</Typography>
+                  <Grid item sx={classes.content}>
+                    <Typography variant="h5" component="h2">Документация</Typography>
                     <Typography color="textSecondary">
-                      Программно-методический комплекс для управления потоками задач
+                      Описание API наших библиотек
                     </Typography>
                   </Grid>
                 </Grid>
               </Grid>
 
-              <Grid item>
-                <Grid container className={classes.menu} spacing={16} wrap="nowrap" onClick={() => handleNavigate('/activity')}>
-                  <Hidden smDown><Grid item xs={1}/></Hidden>
-                  <Grid item>
-                    <Accessibility alt="Flowcon.Life" className={classes.logo} color="disabled"/>
-                  </Grid>
-                  <Grid item className={classes.content}>
-                    <Typography variant="h5" component="h2">Flowcon.Life</Typography>
-                    <Typography color="textSecondary">
-                      Сервис для управления своей жизнью
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              {/*
-              <Grid item>
-                <Grid container className={classes.menu} spacing={16} wrap="nowrap" onClick={() => handleNavigate('/articles/team_of_concilium')}>
-                  <Hidden smDown><Grid item xs={1}/></Hidden>
-                  <Grid item>
-                    <MedicalBag alt="Проверка данных" className={classes.logo} color="disabled"/>
-                  </Grid>
-                  <Grid item className={classes.content}>
-                    <Typography variant="h5" component="h2">Консилиум</Typography>
-                    <Typography color="textSecondary">
-                      Библиотека алгоритмов проверки данных в 1С
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item>
-                <Grid container className={classes.menu} spacing={16} wrap="nowrap" onClick={() => handleNavigate('/planing/')}>
-                  <Hidden smDown><Grid item xs={1}/></Hidden>
-                  <Grid item>
-                    <Timer alt="Планирование" className={classes.logo} color="disabled"/>
-                  </Grid>
-                  <Grid item className={classes.content}>
-                    <Typography variant="h5" component="h2">Планирование ресурсов</Typography>
-                    <Typography color="textSecondary">
-                      Простое решение сложной проблемы
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              */}
             </Grid>
           </Grid>
 
           <Grid item sm={12} lg={7}>
-            <Grid container alignItems="stretch" direction="column" justify="flex-start" className={classes.news}>
+            <Grid container alignItems="stretch" direction="column" justify="flex-start" sx={classes.news}>
               <Grid item>
-                <Grid container spacing={16} wrap="nowrap">
+                <Grid container spacing={2} wrap="nowrap">
                   <Hidden smDown><Grid item xs={1}/></Hidden>
                   <Grid item>
-                    <Typography  variant="h5" component="h3">Новости</Typography>
-                    {
+                    <Typography variant="h5" component="h3">Новости</Typography>
+                    {/*
                       tagFilter.length ?
                         <InfiniteArticles
                           news
@@ -181,7 +135,7 @@ class PageHome extends React.Component {
                         />
                         :
                         <Typography>Загрузка...</Typography>
-                    }
+                    */}
                   </Grid>
                 </Grid>
               </Grid>
@@ -191,19 +145,16 @@ class PageHome extends React.Component {
         </Grid>
 
         <AppFooter handleNavigate={handleNavigate}/>
-      </div>
+      </Box>
     );
   }
 }
 
 PageHome.propTypes = {
-  classes: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
-  handleNavigate: PropTypes.func.isRequired,
-  handleIfaceState: PropTypes.func.isRequired,
+  handleNavigate: PropTypes.func,
+  handleIfaceState: PropTypes.func,
   complete_loaded: PropTypes.bool,
 };
 
-export default withStyles(styles)(PageHome);
+export default PageHome;

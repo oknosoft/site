@@ -1,5 +1,5 @@
 /**
- * Список статей
+ * Список статей, фильтруемый тэгами
  *
  * @module Articles
  *
@@ -65,7 +65,6 @@ class Articles extends Component {
         name: 'title',
         value: this.ltitle,
       });
-
 
       this.setState({tagList: this.tagList(tagFilter), tags: []});
 

@@ -9,6 +9,8 @@
   },
   "env": {
     "browser": true,
+    "node": true,
+    "mocha": true,
     "es6": true
   },
   "plugins": [
@@ -28,7 +30,8 @@
     "process": true,
     "paper": true,
     "expect": true,
-    "TextDecoderStream": true,
+    "sinon": true,
+    "__DEV__": true
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
@@ -42,6 +45,8 @@
     "no-case-declarations": 1,
     "no-console": 0,
     "no-extra-semi": 1,
+    "no-prototype-builtins": 0,
+    "no-setter-return": 0,
     "no-unexpected-multiline": 1,
     "no-useless-escape": 1,
     "no-mixed-spaces-and-tabs": 1,

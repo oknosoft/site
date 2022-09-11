@@ -1,4 +1,3 @@
-import {withStyles} from '@material-ui/styles';
 
 const anchorLinkStyle = (theme, size) => ({
   '& .anchor-link-style': {
@@ -146,4 +145,4 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles, { flip: false, name: 'Markdown' });
+export default styles;

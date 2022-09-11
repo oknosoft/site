@@ -1,31 +1,24 @@
-// @flow
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
-const styleSheet = theme => ({
-  root: {
-    overflow: 'auto',
-  },
-  layout: {
-    padding: theme.spacing.unit * 6,
-  },
-  list: {
-    margin: 0,
-    paddingLeft: 0,
-    listStyle: 'none',
-  },
-  listItem: {
-    paddingTop: theme.spacing.unit / 2,
-    paddingBottom: theme.spacing.unit / 2,
-  },
-});
+const Ul = styled('ul')(({theme}) => ({
+  margin: 0,
+  paddingLeft: 0,
+  listStyle: 'none',
+}));
+
+const Li = styled('li')(({theme}) => ({
+  paddingTop: theme.spacing() / 2,
+  paddingBottom: theme.spacing() / 2,
+}));
 
 function AppFooter(props) {
-  const {classes, handleNavigate} = props;
+  const {handleNavigate} = props;
 
   function onClick(evt) {
     const url = new URL(evt.target.href);
@@ -35,41 +28,32 @@ function AppFooter(props) {
   }
 
   return (
-    <footer className={classes.root}>
-      <div className={classes.layout}>
+    <Box component="footer" sx={{overflow: 'auto'}}>
+      <Box p={4}>
         <Typography variant="h6" gutterBottom>Быстрые ссылки</Typography>
         <Typography variant="subtitle1" component="div">
           <Grid container spacing={0}>
             <Grid item xs={12} sm={6}>
-              <ul className={classes.list}>
-                <li className={classes.listItem}>
-                  <a href="https://business-programming.ru/articles/about-company" onClick={onClick}>О компании</a>
-                </li>
-                <li className={classes.listItem}>
-                  <a href="https://github.com/oknosoft/metadata.js">Metadata.js</a>
-                </li>
-              </ul>
+              <Ul>
+                <Li><a href="/about" onClick={onClick}>О компании</a></Li>
+                <Li><a href="https://github.com/oknosoft/metadata.js">Metadata.js</a></Li>
+              </Ul>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <ul className={classes.list}>
-                <li className={classes.listItem}>
-                  <a href="https://business-programming.ru/news/terms_of_use" onClick={onClick}>Пользовательское соглашение</a>
-                </li>
-                <li className={classes.listItem}>
-                  <a href="https://business-programming.ru/news/privacy_policy" onClick={onClick}>Обработка персональных данных</a>
-                </li>
-              </ul>
+              <Ul>
+                <Li><a href="/news/terms_of_use" onClick={onClick}>Пользовательское соглашение</a></Li>
+                <Li><a href="/news/privacy_policy" onClick={onClick}>Обработка персональных данных</a></Li>
+              </Ul>
             </Grid>
           </Grid>
         </Typography>
-      </div>
-    </footer>
+      </Box>
+    </Box>
   );
 }
 
 AppFooter.propTypes = {
-  classes: PropTypes.object.isRequired,
   handleNavigate: PropTypes.func.isRequired,
 };
 
-export default withStyles(styleSheet)(AppFooter);
+export default AppFooter;

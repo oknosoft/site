@@ -43,6 +43,7 @@
     "metadata-pouchdb": "2.0.30-beta.10",
     "node-fetch": "2.6.7",
     "rate-limiter-flexible": "^2.3",
+    "react-helmet": "^6.1",
     "react-router-dom": "^6.3",
     "react-share": "^4.4",
     "serve-handler": "^6.1",
