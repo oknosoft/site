@@ -33,6 +33,9 @@ function Article({title, handleIfaceState, handleNavigate}) {
     fetch(ref, {method: 'POST', headers})
       .then(res => res.json())
       .then(raw => {
+        if(raw.error && raw.message) {
+          throw new Error(raw.message);
+        }
         articles.load_array([raw]);
         return setDoc(articles.get(raw.ref));
       })
@@ -50,7 +53,7 @@ function Article({title, handleIfaceState, handleNavigate}) {
     handleIfaceState={handleIfaceState}
     handleNavigate={handleNavigate}
     htitle={doc.name || 'без названия'}
-    TopButton={contents && <IconButton
+    TopButton={null && <IconButton
       onClick={() => handleNavigate(`/contents/${contents.id}`)}
       title="Перейти к оглавлению"
     >

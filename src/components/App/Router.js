@@ -25,10 +25,15 @@ function AppRoutes(props) {
     navigate(url);
   };
 
+  const dataRoute = <DataRoute {...mainProps}/>;
+  const loginRoute = <FrmLogin {...mainProps}/>;
+
   return <Routes>
-    <Route index element={<Home {...mainProps}/>}/>
-    <Route path=":area(doc|cat|ireg|cch|rep).:name" element={<DataRoute {...mainProps}/>}/>
-    <Route path=":area(login|settings|profile|password-reset)" element={<FrmLogin {...mainProps}/>}/>
+    <Route path="/" element={<Home {...mainProps}/>}/>
+    <Route path=":area.:name" element={dataRoute}/>
+    <Route path="login" element={loginRoute}/>
+    <Route path="profile" element={loginRoute}/>
+    <Route path="password-reset" element={loginRoute}/>
     <Route path="*" element={<ArticlesRoute {...mainProps}/>}/>
   </Routes>
 }

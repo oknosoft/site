@@ -26,7 +26,7 @@ const items = [
     need_meta: true,
   },
   {
-    text: 'Статьи и книги',
+    text: 'Статьи',
     icon: <LibraryBooks/>,
     id: 'articles',
     //bold: true,
@@ -42,30 +42,6 @@ const items = [
     need_meta: true,
   },
   {
-    text: 'Задачи',
-    id: 'issues',
-    navigate: '/doc.issue/list',
-    icon: <IconDoc/>,
-    need_meta: true,
-    need_user: true,
-  },
-  {
-    text: 'Активность',
-    id: 'activity',
-    navigate: '/activity',
-    icon: <IconAccessibility/>,
-    need_meta: true,
-    need_user: true,
-  },
-  {
-    text: 'Дашборды',
-    icon: <IconChart/>,
-    id: 'diagram',
-    navigate: '/flowcon/diagram',
-    need_meta: true,
-    need_user: false,
-  },
-  {
     divider: true,
   },
   {
@@ -79,13 +55,6 @@ const items = [
     navigate: '/settings',
     need_meta: true,
     icon: <IconSettings/>,
-  },
-  {
-    text: 'Flowcon - что это',
-    icon: <IconHelp/>,
-    id: 'readme',
-    navigate: '/articles/flowcon-readme',
-    need_meta: true,
   },
   {
     text: 'О сайте',
@@ -128,7 +97,7 @@ export function item_props(path) {
     res = with_recursion(path.substr(0, path.lastIndexOf('/')), items);
   }
   if(!res && path.match(/\/(doc|cat|ireg|cch|rep)\./)){
-    res = {need_meta: true, need_user: true, need_doc_ram: true};
+    res = {need_meta: true, need_user: false};
   }
   return res || {};
 }
