@@ -16,7 +16,6 @@ module.exports = function ($p, log, worker) {
 
   const {utils} = $p;
   const couchdbProxy = require('./proxy-couchdb')($p, log);
-  const commonProxy = require('./proxy-common');
   const staticProxy = require('./static');
   const articles = require('../articles')($p, log);
   const adm = require('./adm')($p, log);
@@ -63,8 +62,8 @@ module.exports = function ($p, log, worker) {
         parsed.is_mdm = parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'mdm';
         parsed.is_log = parsed.paths[0] === 'couchdb' && /_log$/.test(parsed.paths[1]);
         parsed.is_event_source = parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'events';
-        parsed.is_common = (parsed.paths[0] === 'common') || (parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'common');
-        parsed.is_static = !parsed.paths[0] || parsed.paths[0].includes('.') || /^(dist|static|imgs|index)$/.test(parsed.paths[0]);
+        parsed.is_static =  /^(static|imgs)$/.test(parsed.paths[0]) ||
+          /\.(json|ico|txt|js|map|webmanifest)$/.test(parsed.paths[0]);
         req.query = qs.parse(parsed.query);
 
         if(parsed.is_static) {
@@ -72,6 +71,9 @@ module.exports = function ($p, log, worker) {
         }
         if(parsed.is_event_source) {
           return event_source(req, res);
+        }
+        if(parsed.is_mdm) {
+          return mdm(req, res, conf);
         }
         if(await articles(req, res)) {
           return;
@@ -85,12 +87,6 @@ module.exports = function ($p, log, worker) {
           })
           .then((user) => {
             if(user) {
-              if(parsed.is_common) {
-                return commonProxy(req, res, conf);
-              }
-              if(parsed.is_mdm) {
-                return mdm(req, res, conf);
-              }
               if(['couchdb', '_session'].includes(parsed.paths[0])) {
                 return couchdbProxy(req, res, auth);
               }
