@@ -2,6 +2,7 @@ const headerRegExp = /---\n([\s\S]*)\n---/;
 const titleRegExp = /# (.*)\n/;
 const headerKeyValueRegExp = /(.*): (.*)/g;
 const emptyRegExp = /^\s*$/;
+export const componentRegExp = /({<.*?>})/g;
 
 export function getHeaders(markdown) {
   let header = markdown.match(headerRegExp);
@@ -35,7 +36,7 @@ export function getHeaders(markdown) {
 export function getContents(markdown) {
   return (markdown || '')
     .replace(headerRegExp, '') // Remove header information
-    .split(/^{{|}}$/gm) // Split markdown into an array, separating demos
+    .split(componentRegExp) // Split markdown into an array, separating demos
     .filter(content => !emptyRegExp.test(content)); // Remove empty lines
 }
 

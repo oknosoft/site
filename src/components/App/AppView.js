@@ -21,16 +21,17 @@ import MailIcon from '@mui/icons-material/Mail';
 import Router from './Router';
 
 const drawerWidth = 280;
+const didable_permanent = window.innerWidth < 640;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })
   (({ theme, open }) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(didable_permanent ? 1 : 3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: `-${drawerWidth}px`,
+    marginLeft: didable_permanent ? 0 : `-${drawerWidth}px`,
     ...(open && {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
@@ -38,6 +39,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })
       }),
       marginLeft: 0,
     }),
+    ...(didable_permanent && {width: '100%'}),
   }));
 
 const AppBar = styled(MuiAppBar, {
@@ -117,7 +119,7 @@ export default function PersistentDrawerLeft({menu_open, ...props}) {
             boxSizing: 'border-box',
           },
         }}
-        variant="persistent"
+        variant={didable_permanent ? "temporary" : "persistent"}
         anchor="left"
         open={menu_open}
       >

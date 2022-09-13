@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import {BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom';
 
 import Home from '../Home';
-import ArticlesRoute from '../Articles';
+import ArticlesRoute from '../Articles/Article';
 
 const DataRoute = (props) => {
   return 'DataRoute';
@@ -49,7 +49,6 @@ function AppRouter(props) {
 
 
 AppRouter.propTypes = {
-  //match: PropTypes.object.isRequired,
   //handlers: PropTypes.object.isRequired,
 };
 

@@ -41,8 +41,8 @@ const share = {
     opacity: 0.75
   },
   display: 'inline-block',
-  marginTop: 8,
-  marginRight: 8
+  marginTop: 1,
+  marginRight: 1
 };
 
 function ShareButton({Component, ...props}) {
@@ -51,7 +51,7 @@ function ShareButton({Component, ...props}) {
 
 function Social(props) {
 
-  const {title, classes} = props;
+  const {title} = props;
   const {href} = location;
   const theme = useTheme();
 
@@ -62,46 +62,40 @@ function Social(props) {
         Component={WhatsappShareButton}
         url={href}
         title={title}
-        separator=":: "
-        className={classes.share}>
+        separator=":: ">
         <WhatsappIcon size={32} round />
       </ShareButton>
       <ShareButton
         Component={TelegramShareButton}
         url={href}
-        title={title}
-        className={classes.share}>
+        title={title}>
         <TelegramIcon size={32} round />
       </ShareButton>
       <ShareButton
         Component={VKShareButton}
         url={href}
         windowWidth={660}
-        windowHeight={460}
-        className={classes.share}>
+        windowHeight={460}>
         <VKIcon size={32} round />
       </ShareButton>
       <ShareButton
         Component={OKShareButton}
         url={href}
         windowWidth={660}
-        windowHeight={460}
-        className={classes.share}>
+        windowHeight={460}>
         <OKIcon size={32} round />
       </ShareButton>
       <ShareButton
         Component={MailruShareButton}
         url={href}
-        title={title}
-        className={classes.share}>
+        title={title}>
         <MailruIcon size={32} round />
       </ShareButton>
       <ShareButton
         Component={EmailShareButton}
         url={href}
         subject={title}
-        body={href}
-        className={classes.share}>
+        body={href}>
         <EmailIcon size={32} round />
       </ShareButton>
     </Box>

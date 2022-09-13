@@ -25,14 +25,17 @@ const styles = theme => ({
     fontFamily: theme.typography.fontFamily,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    padding: `0 ${theme.spacing()}px`,
+    padding: `0 ${theme.spacing()}`,
     color: theme.palette.text.primary,
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: 1280,
+    },
     '& .anchor-link': {
       marginTop: -theme.spacing(12), // Offset for the anchor.
       position: 'absolute',
     },
     '& pre': {
-      margin: `${theme.spacing(3)}px 0`,
+      margin: `${theme.spacing(3)} 0`,
       padding: '12px 18px',
       backgroundColor: theme.palette.background.paper,
       borderRadius: 3,
@@ -99,27 +102,27 @@ const styles = theme => ({
       color: theme.palette.text.secondary,
     },
     '& tbody': {
-      lineHeight: 1.5,
+      lineHeight: 1.6,
       color: theme.palette.text.primary,
     },
     '& td': {
-      borderBottom: `1px solid ${theme.palette.text.lightDivider}`,
-      padding: `${theme.spacing()}px ${theme.spacing(5)}px ${theme.spacing()}px ${theme.spacing(3)}px`,
+      borderBottom: `1px solid ${theme.palette.primary.A100}`,
+      padding: `${theme.spacing(.5)} ${theme.spacing(2)} ${theme.spacing(.5)} ${theme.spacing(.5)}`,
       textAlign: 'left',
     },
     '& td:last-child': {
-      paddingRight: theme.spacing(3),
+      paddingRight: theme.spacing(2),
     },
     '& td compact': {
-      paddingRight: theme.spacing(3),
+      paddingRight: theme.spacing(2),
     },
     '& td code': {
       lineHeight: 1.6,
     },
     '& th': {
       whiteSpace: 'pre',
-      borderBottom: `1px solid ${theme.palette.text.lightDivider}`,
-      padding: `0 ${theme.spacing(5)}px 0 ${theme.spacing(3)}px`,
+      borderBottom: `1px solid ${theme.palette.primary.A100}`,
+      padding: `0 ${theme.spacing(2)} 0 0`,
       textAlign: 'left',
     },
     '& th:last-child': {
@@ -131,8 +134,8 @@ const styles = theme => ({
     '& blockquote': {
       borderLeft: `5px solid ${theme.palette.text.hint}`,
       background: theme.palette.background.paper,
-      padding: `${theme.spacing() / 2}px ${theme.spacing(3)}px`,
-      margin: `${theme.spacing(3)}px 0`,
+      padding: `${theme.spacing(.5)} ${theme.spacing()}`,
+      margin: `${theme.spacing()} 0`,
     },
     '& a, & a code': {
       // Style taken from the Link component

@@ -38,3 +38,4 @@ exports.CatArticlesManager = class CatArticlesManager extends Object {
     return arr;
   }
 }
+

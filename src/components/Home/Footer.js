@@ -41,8 +41,8 @@ function AppFooter(props) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Ul>
-                <Li><a href="/news/terms_of_use" onClick={onClick}>Пользовательское соглашение</a></Li>
-                <Li><a href="/news/privacy_policy" onClick={onClick}>Обработка персональных данных</a></Li>
+                <Li><a href="/terms_of_use" onClick={onClick}>Пользовательское соглашение</a></Li>
+                <Li><a href="/privacy_policy" onClick={onClick}>Обработка персональных данных</a></Li>
               </Ul>
             </Grid>
           </Grid>

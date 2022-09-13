@@ -5,10 +5,11 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import MarkdownElement from './MarkdownElement';
-import {getContents, getTitle} from './parseMarkdown';
+import MarkdownComponents from './MarkdownComponents';
+import {getContents, getTitle, componentRegExp} from './parseMarkdown';
 
 export function MarkdownDocs(props) {
-  const {classes, markdown, subtitle, title, htitle, h1, img,
+  const {markdown, subtitle, title, htitle, h1, img,
     descr, canonical, footer, handleIfaceState, handleNavigate, TopButton} = props;
   const contents = getContents(markdown);
 
@@ -22,7 +23,7 @@ export function MarkdownDocs(props) {
   }
 
   return (
-    <Box mb={100}>
+    <Box mb={8}>
       <Helmet title={ltitle}>
         <meta name="description" content={descr || h1} />
         {canonical && <link rel="canonical" href={canonical} />}
@@ -38,13 +39,20 @@ export function MarkdownDocs(props) {
         </Box>
       }
 
-      {contents.map(content => <MarkdownElement
-        key={content}
-        title={title}
-        handleNavigate={handleNavigate}
-        handleIfaceState={handleIfaceState}
-        text={content}/>)
-      }
+      {contents.map((content, index) => {
+        return content.match(componentRegExp) ?
+          <MarkdownComponents
+            key={`cm-${index}`}
+            handleNavigate={handleNavigate}
+            handleIfaceState={handleIfaceState}
+            text={content}/> :
+          <MarkdownElement
+            key={`m-${index}`}
+            title={title}
+            handleNavigate={handleNavigate}
+            handleIfaceState={handleIfaceState}
+            text={content}/>;
+      })}
 
       {
         footer
@@ -60,6 +68,6 @@ MarkdownDocs.propTypes = {
   h1: PropTypes.string,                 // заголовок статьи
   descr: PropTypes.string,              // html meta description
   footer: PropTypes.node,               // кнопки share соцсетей, прочие элементы в подвале
-}
+};
 
 export default MarkdownDocs;

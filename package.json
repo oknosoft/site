@@ -34,7 +34,6 @@
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.4",
     "fetch-cookie": "^1.0",
-    "history": "^5.3",
     "http-proxy": "^1.18",
     "marked": "^4.1",
     "md5-file": "^5.0",

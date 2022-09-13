@@ -8,7 +8,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {useParams} from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import IconContents from '@mui/icons-material/FormatListNumbered';
 
@@ -20,7 +19,7 @@ import Loading from '../App/Loading';
 
 function Article({title, handleIfaceState, handleNavigate}) {
   const [doc, setDoc] = React.useState(null);
-  const {ref} = useParams();
+  const ref = location.pathname;
 
   React.useEffect(() => {
     const {articles} = $p.cat;
@@ -48,27 +47,35 @@ function Article({title, handleIfaceState, handleNavigate}) {
   if(doc === 404 || doc instanceof Error) {
     return <NotFound title={title} handleIfaceState={handleIfaceState} handleNavigate={handleNavigate} />;
   }
-  return <MarkdownDocs
-    title={title}
-    handleIfaceState={handleIfaceState}
-    handleNavigate={handleNavigate}
-    htitle={doc.name || 'без названия'}
-    TopButton={null && <IconButton
-      onClick={() => handleNavigate(`/contents/${contents.id}`)}
+  const mprops = {
+    title,
+    htitle: doc.name || 'без названия',
+    handleIfaceState,
+    handleNavigate,
+    h1: doc.h1,
+    descr: doc.descr,
+    img: doc.img || '/imgs/flask_192.png',
+    markdown: doc.content || 'текст отсутствует',
+  };
+  if(ref !== `/${doc.id}`) {
+    mprops.canonical = location.href.replace(ref, `/${doc.id}`);
+  }
+  if(!ref) {
+    mprops.TopButton = <IconButton
+      onClick={() => handleNavigate(doc.id)}
       title="Перейти к оглавлению"
     >
       <IconContents />
-    </IconButton>}
-    h1={doc.h1}
-    descr={doc.descr}
-    /* canonical={match.path.replace(':ref', doc.id)} */
-    img={doc.img || 'https://business-programming.ru/imgs/flask_192.png'}
-    markdown={doc.content || 'текст отсутствует'}
-    footer={ match.path.match(/\/(articles|files)\//) && [
-      //<Attachments key="attachments" _obj={doc} handleIfaceState={handleIfaceState} />,
-      <Social key="social" title={doc.name}/>,
-    ]}
-  />;
+    </IconButton>;
+  }
+  if(doc.category.att_allowed) {
+    mprops.footer = <>
+      {/*<Attachments key="attachments" _obj={doc} handleIfaceState={handleIfaceState} />*/}
+      <Social key="social" title={doc.name}/>
+    </>;
+  }
+
+  return <MarkdownDocs {...mprops}/>;
 }
 
 
