@@ -17,6 +17,8 @@ import Social from './Social';
 import Loading from '../App/Loading';
 //import Attachments from './Attachments';
 
+const cprefix = '/couchdb/www_0_ram/cat.articles|';
+
 function Article({title, handleIfaceState, handleNavigate}) {
   const [doc, setDoc] = React.useState(null);
   const ref = location.pathname;
@@ -55,7 +57,9 @@ function Article({title, handleIfaceState, handleNavigate}) {
     h1: doc.h1,
     descr: doc.descr,
     img: doc.img || '/imgs/flask_192.png',
-    markdown: doc.content || 'текст отсутствует',
+    markdown: (doc.content || 'текст отсутствует')
+      .replace(/\!\[image\]\(this/gm, `![image](${cprefix}${doc.ref}`)
+      .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`),
   };
   if(ref !== `/${doc.id}`) {
     mprops.canonical = location.href.replace(ref, `/${doc.id}`);

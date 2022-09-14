@@ -18,8 +18,8 @@
 # Exclude compiled files
 /build
 /scripts/stats.json
-/.eslintcache
 /public/data/
+/public/imgs/stories/
 /server/mdm/cache/
 !/server/mdm/cache/.gitkeep
 
@@ -29,6 +29,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.eslintcache
 
 *.log*
 yarn.lock

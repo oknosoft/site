@@ -75,6 +75,9 @@ module.exports = function ($p, log, worker) {
         if(parsed.is_mdm) {
           return mdm(req, res, conf);
         }
+        if(['couchdb', '_session'].includes(parsed.paths[0])) {
+          return couchdbProxy(req, res, auth);
+        }
         if(await articles(req, res)) {
           return;
         }
@@ -87,9 +90,7 @@ module.exports = function ($p, log, worker) {
           })
           .then((user) => {
             if(user) {
-              if(['couchdb', '_session'].includes(parsed.paths[0])) {
-                return couchdbProxy(req, res, auth);
-              }
+
               if(['adm', 'r', 'prm', 'plan'].includes(parsed.paths[0])) {
                 return adm(req, res);
               }

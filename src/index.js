@@ -7,8 +7,10 @@ import App from './components/App';
 import Metadata from './components/App/Metadata';
 import * as swRegistration from './serviceWorkerRegistration';
 
+const elm = document.getElementById('root');
+const initialText = elm.innerHTML;
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Metadata App={App} />);
+root.render(<Metadata App={App} initialText={initialText} />);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

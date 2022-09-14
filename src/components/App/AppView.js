@@ -18,6 +18,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import IconHome from '@mui/icons-material/Home';
+import {BrowserRouter, useNavigate} from 'react-router-dom';
 import Router from './Router';
 
 const drawerWidth = 280;
@@ -73,7 +75,9 @@ const Space = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-export default function PersistentDrawerLeft({menu_open, ...props}) {
+const Root = styled('div')(() => ({display: 'flex'}));
+
+function PersistentDrawerLeft({menu_open, ...props}) {
   const theme = useTheme();
   const {handleIfaceState} = props;
 
@@ -91,8 +95,14 @@ export default function PersistentDrawerLeft({menu_open, ...props}) {
     boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%)',
   };
 
+  const navigate = useNavigate();
+  const handleNavigate = (url) => {
+    navigate(url);
+  };
+  props.handlers.handleNavigate = handleNavigate;
+
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Root>
       <CssBaseline />
       <AppBar position="fixed" open={menu_open} sx={sx_color} >
         <Toolbar>
@@ -124,16 +134,14 @@ export default function PersistentDrawerLeft({menu_open, ...props}) {
         open={menu_open}
       >
         <DrawerHeader sx={sx_color}>
-          <Box sx={{flex: 1}}>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary="Главная" />
-              </ListItemButton>
-            </ListItem>
-          </Box>
+          <ListItem sx={{flex: 1}} disablePadding onClick={() => navigate('/')}>
+            <ListItemButton>
+              <ListItemIcon>
+                <IconHome />
+              </ListItemIcon>
+              <ListItemText primary="Главная" />
+            </ListItemButton>
+          </ListItem>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -167,8 +175,14 @@ export default function PersistentDrawerLeft({menu_open, ...props}) {
       </Drawer>
       <Main open={menu_open}>
         <Space />
-        <Router {...props}/>
+        <Router {...props} handleNavigate={handleNavigate}/>
       </Main>
-    </Box>
+    </Root>
   );
+}
+
+export default function AppView(props) {
+  return <BrowserRouter>
+    <PersistentDrawerLeft {...props} />
+  </BrowserRouter>;
 }

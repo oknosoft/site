@@ -15,11 +15,11 @@ export function MarkdownDocs(props) {
 
   const ltitle = htitle || `${getTitle(markdown)}${subtitle ? ' - ' + subtitle : ''}`;
   if (title != ltitle) {
-    handleIfaceState({
+    React.useEffect(() => handleIfaceState({
       component: '',
       name: 'title',
       value: ltitle,
-    });
+    }));
   }
 
   return (
@@ -34,7 +34,7 @@ export function MarkdownDocs(props) {
 
       {
         h1 && <Box sx={{display: 'flex'}}>
-          <Typography key="h1" variant="h4" component="h1" color="primary" sx={{width: '100%'}}>{h1}</Typography>
+          <Typography variant="h4" component="h1" color="primary" sx={{width: '100%'}}>{h1}</Typography>
           {TopButton}
         </Box>
       }

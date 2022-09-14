@@ -10,9 +10,9 @@ import PropTypes from 'prop-types';
 import {ThemeProvider} from '@mui/material';  // провайдер тема material=ui
 
 import Loading from './Loading';
-import {actions, init_state} from './actions';      // события метадаты
-import theme from '../../styles/muiTheme';                     // тема material=ui
-import {item_props} from './menu';                        // конструкторы для контекста
+import {actions, init_state} from './actions';  // события метадаты
+import theme from '../../styles/muiTheme';      // тема material=ui
+import {item_props} from './menu';              // конструкторы для контекста
 
 class Metadata extends React.Component {
 
@@ -34,7 +34,7 @@ class Metadata extends React.Component {
 
 
   render() {
-    const {props: {App}, state, handleIfaceState} = this;
+    const {props: {App, initialText}, state, handleIfaceState} = this;
     const {...othes} = state;
 
     Object.assign(othes, {
@@ -48,7 +48,7 @@ class Metadata extends React.Component {
     }
 
     return <ThemeProvider theme={theme}>
-      {show_dumb ? <Loading {...othes} /> :<App {...othes}/>}
+      {show_dumb ? <Loading {...othes} html={initialText} /> : <App {...othes}/>}
     </ThemeProvider>;
   }
 

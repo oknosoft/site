@@ -13,6 +13,7 @@ const {readFile} = require('node:fs/promises');
 const cache = {
   title: 'Окнософт',
   description: require('./description'),
+  cprefix: '/couchdb/www_0_ram/cat.articles|',
   async load(file = 'index') {
     const html = this[file];
     if(html) {
@@ -95,8 +96,12 @@ async function fill(doc) {
       `<meta property="og:description" content="${descr}" data-react-helmet="true">`);
     html = html.replace(
       `<div id="root"></div>`,
-      `<div id="root"><div style="max-width: 960px; padding-top: 48px; margin: auto;">
-<h1>${doc.h1 || doc.name}</h1>${marked.parse(doc.content || '')}</div></div>`);
+      `<div id="root"><div style="max-width: 960px; padding: 48px 8px; margin: auto; color: #777;">
+<h1>${doc.h1 || doc.name}</h1>${marked.parse(
+        (doc.content || '')
+          .replace(/\!\[image\]\(this/gm, `![image](${cache.cprefix}${doc.ref}`)
+          .replace(/src="this\//gm, `src="${cache.cprefix}${doc.ref}/`),
+      )}</div></div>`);
 
     if(doc.img) {
       html = html.replace('https://oknosoft.ru/imgs/flask_192.png', doc.img);

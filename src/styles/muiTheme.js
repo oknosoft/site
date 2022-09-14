@@ -14,6 +14,15 @@ const theme = createTheme({
     }
   },
 
+  typography: {
+    h4: {
+      fontSize: '1.8rem',
+      '@media (min-width:1200px)': {
+        fontSize: '2rem',
+      },
+    }
+  },
+
   components: {
     // Name of the component️
     MuiButtonBase: {
