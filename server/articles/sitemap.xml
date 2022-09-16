@@ -4,15 +4,12 @@
     <loc>https://oknosoft.ru</loc>
   </url>
   <url>
-    <loc>https://oknosoft.ru/about</loc>
+    <loc>https://oknosoft.ru/articles</loc>
   </url>
   <url>
-    <loc>https://oknosoft.ru/articles/</loc>
+    <loc>https://oknosoft.ru/files</loc>
   </url>
   <url>
-    <loc>https://oknosoft.ru/files/</loc>
-  </url>
-  <url>
-    <loc>https://oknosoft.ru/news/</loc>
+    <loc>https://oknosoft.ru/news</loc>
   </url>
 </urlset>
