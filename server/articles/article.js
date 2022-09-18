@@ -17,7 +17,7 @@ const cache = {
       return html;
     }
     try {
-      this[file] = await readFile(resolve(appBuild, `${file}.html`), 'utf8');
+      this[file] = await readFile(resolve(file = 'index' ? appBuild : __dirname, `${file}.html`), 'utf8');
     }
     catch (e) {}
     return this[file];

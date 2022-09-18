@@ -9,7 +9,8 @@
 const xml = require('fs').readFileSync(require.resolve('./sitemap.xml'), 'utf8');
 const su = process.env.SERVER_URL;
 
-function row({id, date}) {
+function row(doc) {
+  const {id, date} = doc;
   return `<url>
     <loc>${su}/${id}</loc>
     <lastmod>${date.toISOString().split('T')[0]}</lastmod>
@@ -20,7 +21,7 @@ module.exports = function (req, res, articles, log) {
   let rows = '';
   // бежим по всем статьям
   for(const doc of articles) {
-    if(doc.published){
+    if(doc.published && doc.acl.find({role: '_anonymous'})){
       rows += row(doc);
     }
   }

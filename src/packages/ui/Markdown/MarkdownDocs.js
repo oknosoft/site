@@ -8,9 +8,9 @@ import MarkdownElement from './MarkdownElement';
 import MarkdownComponents from './MarkdownComponents';
 import {getContents, getTitle, componentRegExp} from './parseMarkdown';
 
-export function MarkdownDocs(props) {
-  const {markdown, subtitle, title, htitle, h1, img,
-    descr, canonical, footer, handleIfaceState, handleNavigate, TopButton} = props;
+export function MarkdownDocs({markdown, subtitle, title, htitle, h1, img, descr, canonical, footer,
+                               handleIfaceState, handleNavigate, TopButton, components = {}}) {
+
   const contents = getContents(markdown);
 
   const ltitle = htitle || `${getTitle(markdown)}${subtitle ? ' - ' + subtitle : ''}`;
@@ -45,13 +45,16 @@ export function MarkdownDocs(props) {
             key={`cm-${index}`}
             handleNavigate={handleNavigate}
             handleIfaceState={handleIfaceState}
-            text={content}/> :
+            text={content}
+            components={components}
+          /> :
           <MarkdownElement
             key={`m-${index}`}
             title={title}
             handleNavigate={handleNavigate}
             handleIfaceState={handleIfaceState}
-            text={content}/>;
+            text={content}
+          />;
       })}
 
       {

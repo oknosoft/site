@@ -5,9 +5,9 @@
  * Created by Evgeniy Malyarov on 17.04.2018.
  */
 
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 
 import Home from '../Home';
 import ArticlesRoute from '../Articles/Article';

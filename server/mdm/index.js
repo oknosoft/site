@@ -33,7 +33,6 @@ const common = [
   'cat.organizations',
   'cat.partners',
   'cat.tags',
-  'cat.tags_category',
 ];
 
 function mdm ($p, log) {

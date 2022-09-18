@@ -1391,7 +1391,7 @@ class CatFormulasManager extends CatManager {
 
   constructor(owner, class_name) {
     super(owner, class_name);
-    this._owner.$p.adapters.pouch.once('pouch_data_loaded', () => this.load_formulas().bind(this));
+    this._owner.$p.adapters.pouch.once('pouch_data_loaded', () => this.load_formulas.bind(this));
   }
 
   load_formulas(src) {

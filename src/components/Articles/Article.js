@@ -15,7 +15,10 @@ import MarkdownDocs from '../../packages/ui/Markdown/MarkdownDocs';
 import NotFound from '../Pages/NotFound';  // 404
 import Social from './Social';
 import Loading from '../App/Loading';
-//import Attachments from './Attachments';
+import Footer from '../Home/Footer';
+const Attachments = React.lazy(() => import('./Attachments'));
+const Contents = React.lazy(() => import('./Contents'));
+const components = {Footer, Contents};
 
 const cprefix = '/couchdb/www_0_ram/cat.articles|';
 
@@ -29,6 +32,7 @@ function Article({title, handleIfaceState, handleNavigate}) {
     if(!tmp.empty()) {
       return setDoc(tmp);
     }
+    // если не нашли статью в памяти браузера, ищем на сервере
     const headers = new Headers();
     headers.set('Accept', 'application/json');
     fetch(ref, {method: 'POST', headers})
@@ -60,6 +64,7 @@ function Article({title, handleIfaceState, handleNavigate}) {
     markdown: (doc.content || 'текст отсутствует')
       .replace(/\!\[image\]\(this/gm, `![image](${cprefix}${doc.ref}`)
       .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`),
+    footer: [],
   };
   if(ref !== `/${doc.id}`) {
     mprops.canonical = location.href.replace(ref, `/${doc.id}`);
@@ -72,11 +77,17 @@ function Article({title, handleIfaceState, handleNavigate}) {
       <IconContents />
     </IconButton>;
   }
-  if(doc.category.att_allowed) {
-    mprops.footer = <>
-      {/*<Attachments key="attachments" _obj={doc} handleIfaceState={handleIfaceState} />*/}
-      <Social key="social" title={doc.name}/>
-    </>;
+  if(doc.category.is('contents')) {
+    mprops.markdown += `\n<Contents ref="${doc.ref}"/>`;
+  }
+  if(doc.category.is('file')) {
+    mprops.footer.push(
+      <React.Suspense key="attachments" fallback="Загрузка...">
+        <Attachments _obj={doc} handleIfaceState={handleIfaceState} />
+      </React.Suspense>);
+  }
+  if(doc.category.is('file') || doc.category.is('news') || doc.category.is('article')) {
+    mprops.footer.push(<Social key="social" title={doc.name}/>);
   }
 
   return <MarkdownDocs {...mprops}/>;

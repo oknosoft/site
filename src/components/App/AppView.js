@@ -90,7 +90,7 @@ function PersistentDrawerLeft({menu_open, ...props}) {
   };
 
   const sx_color = {
-    backgroundColor: theme.palette.primary['50'],
+    backgroundColor: theme.palette.primary[50],
     color: theme.palette.primary.dark,
     boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%)',
   };

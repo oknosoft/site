@@ -9,24 +9,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import Typography from '@material-ui/core/Typography';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
-import IconBulleted from '@material-ui/icons/FormatListBulleted';
+import Typography from '@mui/material/Typography';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconBulleted from '@mui/icons-material/FormatListBulleted';
 
-import AppContent from 'metadata-react/App/AppContent';
-import SubLink from 'metadata-react/Markdown/SubLink';
-import withStyles from './styles';
+import SubLink from '../../packages/ui/Markdown/SubLink';
 import cn from 'classnames';
 import {description} from '../App/menu';
 
 
 const ltitle = 'Оглавление';
 
-const sort = (a, b) => a.sorting_field - b.sorting_field;
+const sort = $p.utils.sort('sorting_field');
 
 class Contents extends Component {
 
@@ -156,17 +154,17 @@ class Contents extends Component {
       const res = [];
       rows.sort(sort).forEach((row, index) => {
         const children = row._children();
-        res.push(<ExpansionPanel key={`c-${index}`}>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        res.push(<Accordion key={`c-${index}`}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="h6" component="h2" color="primary">
               {row.name}
               <SubLink url={`/contents/${row.id}`} onClick={(e) => this.navigate(e, `/contents/${row.id}`)}/>
             </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails classes={{root: this.props.classes.details}}>
+          </AccordionSummary>
+          <AccordionDetails classes={{root: this.props.classes.details}}>
             {children.length ? this.renderSubRows(children.sort(sort)) : this.renderArticles(row)}
-          </ExpansionPanelDetails>
-        </ExpansionPanel>);
+          </AccordionDetails>
+        </Accordion>);
       });
       return res;
     }
@@ -175,7 +173,7 @@ class Contents extends Component {
   render() {
     const {props: {match, classes}, state: {rows}} = this;
 
-    return <AppContent >
+    return <>
       <Helmet title={ltitle}>
         <meta name="description" content={description} />
         <link rel="canonical" href={match.path + (match.path.endsWith('/') ? '' : '/')} />
@@ -197,7 +195,7 @@ class Contents extends Component {
         </div>
         {this.renderRows(rows)}
       </div>
-    </AppContent>;
+    </>;
   }
 }
 
@@ -210,4 +208,4 @@ Contents.propTypes = {
   handleIfaceState: PropTypes.func.isRequired,
 };
 
-export default withStyles(Contents);
+export default Contents;

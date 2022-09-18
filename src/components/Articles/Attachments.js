@@ -8,9 +8,9 @@
 
 import React from 'react';
 
-import Typography from '@material-ui/core/Typography';
-import AttachmentsToolbar from 'metadata-react/FrmAttachments/AttachmentsToolbar';
-import AttachmentsList from 'metadata-react/FrmAttachments/AttachmentsList';
+import Typography from '@mui/material/Typography';
+import AttachmentsToolbar from '../../packages/ui/FrmAttachments/AttachmentsToolbar';
+import AttachmentsList from '../../packages/ui/FrmAttachments/AttachmentsList';
 
 let name = '';
 function handleSelect(select){
