@@ -9,7 +9,7 @@ import * as swRegistration from './serviceWorkerRegistration';
 
 const elm = document.getElementById('root');
 const initialText = elm.innerHTML;
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(elm);
 root.render(<Metadata App={App} initialText={initialText} />);
 
 // If you want your app to work offline and load faster, you can change

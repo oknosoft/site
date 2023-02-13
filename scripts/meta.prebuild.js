@@ -1,6 +1,6 @@
 /**
- * ### Модуль сборки *.js по описанию метаданных
- * &copy; Evgeniy Malyarov http://www.oknosoft.ru 2014-2019
+ * Модуль сборки *.js по описанию метаданных
+ * &copy; Evgeniy Malyarov http://www.oknosoft.ru 2014-2023
  * @module  metadata-prebuild
  */
 
