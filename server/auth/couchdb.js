@@ -7,7 +7,6 @@
  * Created by Evgeniy Malyarov on 13.06.2019.
  */
 
-const fetch = require('node-fetch');
 
 module.exports = function () {
 
