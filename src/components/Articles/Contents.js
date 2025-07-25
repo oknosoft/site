@@ -17,8 +17,8 @@ import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconBulleted from '@mui/icons-material/FormatListBulleted';
 
-import SubLink from '../../packages/ui/Markdown/SubLink';
-import cn from 'classnames';
+import SubLink from 'metadata-ui/Markdown/SubLink';
+import cn from 'clsx';
 import {description} from '../App/menu';
 
 

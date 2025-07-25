@@ -30,7 +30,7 @@ $p.wsql.init(settings);
 meta_init($p);
 
 // скрипт инициализации в привязке к store приложения
-export function init(elm) {
+export function init(handleIfaceState) {
 
   try{
 
@@ -50,7 +50,7 @@ export function init(elm) {
     modifiers($p);
 
     // информируем хранилище о готовности MetaEngine
-    elm.setState({meta_loaded: true});
+    handleIfaceState({meta_loaded: true});
 
     // читаем общие данные в ОЗУ
     return load_common($p);

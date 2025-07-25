@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import Chip from '@material-ui/core/Chip';
-import cn from 'classnames';
+import cn from 'clsx';
 
 
 export default function ArticleRow(props) {

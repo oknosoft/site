@@ -5,13 +5,43 @@
 const path = require('path');
 const fs = require('fs');
 const md5File = require('md5-file');
-const localNodeModules = path.resolve(__dirname, '../node_modules');
-const remoteNodeModules = '..\\metadata\\packages';
-const {dependencies} = require(path.resolve(__dirname, '../package.json'));
-const libs = Object.keys(dependencies).filter(v => /^metadata-/.test(v));
-//libs.push('docdash');
 
-function fromDir(startPath, filter, callback) {
+const localNodeModules = path.resolve(__dirname, '../node_modules');
+const {dependencies} = require(path.resolve(__dirname, '../package.json'));
+
+// накапливаем пути
+const repos = [
+  // {
+  //   local: 'wb-core',
+  //   remote: '..\\wb-core',
+  //   dir: 'dist',
+  // },
+  {
+    local: 'metadata-core',
+    remote: '..\\metadata\\packages\\metadata-core',
+    dir: '',
+  },
+  {
+    local: 'metadata-pouchdb',
+    remote: '..\\metadata\\packages\\metadata-pouchdb',
+    dir: '',
+  },
+  {
+    local: 'metadata-ui',
+    remote: '..\\metadata-ui\\dist',
+    dir: '',
+  },
+];
+
+// for(const local of Object.keys(dependencies).filter(v => /^metadata-/.test(v))) {
+//   repos.push({
+//     local,
+//     remote: `..\\metadata\\packages\\${local}`,
+//     dir: '',
+//   });
+// }
+
+function fromDir(startPath, filter, dirFilter, callback) {
 
   if(!fs.existsSync(startPath)) {
     console.log('no dir ', startPath);
@@ -21,26 +51,29 @@ function fromDir(startPath, filter, callback) {
   const files = fs.readdirSync(startPath);
   for (let i = 0; i < files.length; i++) {
     const filename = path.join(startPath, files[i]);
-    if(/node_modules|\\src\\|\/src\//.test(filename)){
+    if(/node_modules/.test(filename)){
       continue;
     }
     const stat = fs.lstatSync(filename);
     if(stat.isDirectory()) {
-      callback(filename, true);
-      fromDir(filename, filter, callback); //recurse
+      if(!dirFilter || dirFilter.test(files[i]) || dirFilter.test(startPath)) {
+        callback(filename, true);
+        fromDir(filename, filter, dirFilter, callback); //recurse
+      }
     }
     else if(filter.test(filename)) {
       callback(filename);
     }
-  };
-};
+  }
+}
 
+// исполняем
 let copied;
-for (const lib of libs) {
-  const lpath = path.resolve(localNodeModules, lib);
-  const rpath = lib === 'docdash' ?  path.resolve('../', lib) : path.resolve(remoteNodeModules, lib);
+for(const {local, remote, dir, dirFilter} of repos) {
+  const lpath = path.resolve(localNodeModules, local, dir);
+  const rpath = path.resolve(remote, dir);
   let i = 0;
-  fromDir(rpath, /\.(css|js|mjs|md|map|tmpl)$/, (rname, isDir) => {
+  fromDir(rpath, /\.(css|js|mjs|md|map|woff2|svg|gif|png|ts|json)$/, dirFilter, (rname, isDir) => {
     const name = rname.replace(rpath, '');
     const lame = path.join(lpath, name);
     if(isDir) {
@@ -58,6 +91,13 @@ for (const lib of libs) {
     console.log(`from ${rpath} written ${i} files`);
   }
 }
-if(!copied){
+
+
+if(copied){
+  // чистим cache webpack
+  console.log(`clearing cache`);
+  fs.rm(path.resolve(__dirname, '../node_modules/.cache'), {recursive: true, force: true}, () => null);
+}
+else {
   console.log(`all files match`);
 }

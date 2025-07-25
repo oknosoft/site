@@ -2,10 +2,10 @@
  * упрощенный рендер статьи
  */
 
-const marked = require('marked');
 const {resolve} = require('path');
 const {appBuild} = require('../../config/paths');
 const {readFile} = require('node:fs/promises');
+const marked = require('../../lib/marked.cjs');
 
 const cache = {
   title: 'Окнософт',
@@ -17,7 +17,7 @@ const cache = {
       return html;
     }
     try {
-      this[file] = await readFile(resolve(file = 'index' ? appBuild : __dirname, `${file}.html`), 'utf8');
+      this[file] = await readFile(resolve(file === 'index' ? appBuild : __dirname, `${file}.html`), 'utf8');
     }
     catch (e) {}
     return this[file];

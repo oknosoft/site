@@ -8,7 +8,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route} from 'react-router';
 
 // import Articles from './Articles';
 // import Contents from './Contents';

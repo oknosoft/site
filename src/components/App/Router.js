@@ -6,39 +6,33 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import {Route, Routes} from 'react-router-dom';
+import {createBrowserRouter} from 'react-router';
+import RootWithDrawer from './RootWithDrawer';
 
 import Home from '../Home';
 import ArticlesRoute from '../Articles/Article';
 
-const DataRoute = (props) => {
-  return 'DataRoute';
-};
+const DataRoute = () => 'DataRoute';
 const FrmLogin = () => 'FrmLogin';
+const loginRoute = <FrmLogin />;
+const element = <RootWithDrawer />;
 
-function AppRouter(props) {
-  // const {match, handlers, offline, user} = this.props;
-  // const {area, name} = match.params;
 
-  const dataRoute = <DataRoute {...props}/>;
-  const loginRoute = <FrmLogin {...props}/>;
+export const router = createBrowserRouter([
+  {
+    element,
+    errorElement: element,
+    children: [
+      {path: "/", element: <Home />},
+      {path: ":area.:name", element: <DataRoute />},
+      {path: "login", element: loginRoute},
+      {path: "profile", element: loginRoute},
+      {path: "password-reset", element: loginRoute},
+      {path: "*", element: <ArticlesRoute />},
+    ],
+  },
+]);
 
-  return <Routes>
-    <Route path="/" element={<Home {...props}/>}/>
-    <Route path=":area.:name" element={dataRoute}/>
-    <Route path="login" element={loginRoute}/>
-    <Route path="profile" element={loginRoute}/>
-    <Route path="password-reset" element={loginRoute}/>
-    <Route path="*" element={<ArticlesRoute {...props}/>}/>
-  </Routes>;
-}
-
-AppRouter.propTypes = {
-  handlers: PropTypes.object.isRequired,
-};
-
-export default AppRouter;
 
 
 

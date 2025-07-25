@@ -6,7 +6,6 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-import classnames from 'classnames';
 
 const styles = theme => ({
   avatar: {

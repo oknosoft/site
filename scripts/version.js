@@ -9,14 +9,17 @@ process.on('unhandledRejection', err => {
 });
 
 const path = require('path');
-const fs = require('fs');
-//const glob = require('glob');
+const fs = require('fs-extra');
+const appBuild = path.resolve(__dirname, '../build');
 
-const paths = require('../config/paths');
 const packageData = require('../package.json');
 const moment = require('moment');
-const build = `{"build": "v${packageData.version} (${packageData.dependencies['metadata-core']}), ${moment().format()}"}`;
-fs.writeFile(path.resolve(paths.appBuild + '/build.json').replace(/\\/g, '/'), build, 'utf8', function (err) {
+const build = JSON.stringify({
+  build: `v${packageData.version} (${packageData.dependencies['metadata-core']}), ${moment().format()}`,
+  stamp: Date.now(),
+});
+//fs.remove(appBuild + '/dynamic-settings.js');
+fs.writeFile(path.resolve(appBuild + '/build.json').replace(/\\/g, '/'), build, 'utf8', function (err) {
   if(err) {
     console.log(err);
     process.exit(1);

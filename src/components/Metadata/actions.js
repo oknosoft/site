@@ -4,8 +4,9 @@
  * Created by Evgeniy Malyarov on 14.02.2021.
  */
 
-import {load_ram} from '../../packages/superlogin-proxy';
+import {load_ram, load_ram_splitted} from '../../packages/superlogin-proxy/no_ram';
 
+const {innerWidth} = window;
 export const init_state = {
   meta_loaded: false,
   common_loaded: false,
@@ -15,8 +16,10 @@ export const init_state = {
   idle: false,
   page: {},
   offline: false,
+  server_error: '',
   title: 'Окнософт',
-  menu_open: window.innerWidth > 960,
+  innerWidth,
+  menu_open: innerWidth > 960,
   error: null,
   user: {
     logged_in: false,
@@ -30,50 +33,39 @@ export const init_state = {
   wnd_portal: null,
 };
 
-function log_in() {
-  return fetch('/auth/couchdb')
-    .then((res) => res.json())
-    .then((res) => {
-      const {classes: {PouchDB}, adapters: {pouch}, cat: {users}}= $p;
-      const {props, remote, fetch} = pouch;
-      props._auth = {username: res.id};
-      props._suffix = res.suffix || '';
-      props._user = res.ref;
-
-      remote.ram = new PouchDB(pouch.dbpath('ram'), {skip_setup: true, owner: pouch, fetch});
-      remote.doc = new PouchDB(pouch.dbpath('doc'), {skip_setup: true, owner: pouch, fetch});
-
-      return users.create(res, false, true);
-    });
-}
-
-export function actions(elm) {
+export function actions(handleIfaceState) {
 
   // скрипт инициализации структуры метаданных и модификаторы
   return Promise.resolve()
     .then(() => import('../../metadata'))
-    .then((module) => module.init(elm))
+    .then((module) => module.init(handleIfaceState))
     .then(() => {
       // font-awesome, roboto и стили metadata подгрузим асинхронно
-      import('../../packages/roboto/font.css');
+      import('metadata-ui/fontsource/roboto/300.css');
+      import('metadata-ui/fontsource/roboto/400.css');
+      import('metadata-ui/fontsource/roboto/500.css');
+      import('metadata-ui/fontsource/roboto/700.css');
     })
     .then(() => {
       const {classes: {PouchDB}, adapters: {pouch}, job_prm, md, ui, cat: {users}} = $p;
-      elm.setState({common_loaded: true});
-      const {handleNavigate, handleIfaceState} = elm;
+      handleIfaceState({common_loaded: true});
       //ui.dialogs.init({handleIfaceState, handleNavigate, {}});
 
       pouch.on({
         pouch_complete_loaded() {
-          elm.setState({complete_loaded: true});
+          handleIfaceState({complete_loaded: true});
         },
 
         pouch_data_page(page) {
-          elm.setState({page});
+          handleIfaceState({page: {...page}});
+        },
+
+        user_log_fault(err) {
+          handleIfaceState({server_error: err.message});
         },
 
         on_log_in(name) {
-          elm.setState({user: {
+          handleIfaceState({user: {
               name,
               logged_in: true,
               try_log_in: false,

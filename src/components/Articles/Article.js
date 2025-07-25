@@ -11,11 +11,12 @@ import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import IconContents from '@mui/icons-material/FormatListNumbered';
 
-import MarkdownDocs from '../../packages/ui/Markdown/MarkdownDocs';
+import MarkdownDocs from 'metadata-ui/Markdown/MarkdownDocs';
 import NotFound from '../Pages/NotFound';  // 404
 import Social from './Social';
 import Loading from '../App/Loading';
 import Footer from '../Home/Footer';
+import {useTitleContext} from '../App';
 const Attachments = React.lazy(() => import('./Attachments'));
 const Contents = React.lazy(() => import('./Contents'));
 const components = {Footer, Contents};
@@ -23,6 +24,7 @@ const components = {Footer, Contents};
 const cprefix = '/couchdb/www_0_ram/cat.articles|';
 
 function Article({title, handleIfaceState, handleNavigate}) {
+  const {setTitle} = useTitleContext();
   const [doc, setDoc] = React.useState(null);
   const ref = location.pathname;
 
@@ -65,6 +67,7 @@ function Article({title, handleIfaceState, handleNavigate}) {
       .replace(/\!\[image\]\(this/gm, `![image](${cprefix}${doc.ref}`)
       .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`),
     footer: [],
+    setTitle,
   };
   if(ref !== `/${doc.id}`) {
     mprops.canonical = location.href.replace(ref, `/${doc.id}`);

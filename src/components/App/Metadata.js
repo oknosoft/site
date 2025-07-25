@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import {ThemeProvider} from '@mui/material';  // провайдер тема material=ui
 
 import Loading from './Loading';
-import {actions, init_state} from './actions';  // события метадаты
+import {actions, init_state} from '../Metadata/actions';  // события метадаты
 import theme from '../../styles/muiTheme';      // тема material=ui
 import {item_props} from './menu';              // конструкторы для контекста
 

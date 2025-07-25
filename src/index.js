@@ -4,7 +4,7 @@ import './styles/global.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
-import Metadata from './components/App/Metadata';
+import Metadata from './components/Metadata';
 import * as swRegistration from './serviceWorkerRegistration';
 
 const elm = document.getElementById('root');

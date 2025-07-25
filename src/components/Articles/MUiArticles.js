@@ -7,7 +7,7 @@
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
+import cn from 'clsx';
 
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';

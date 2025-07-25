@@ -17,14 +17,13 @@ const Li = styled('li')(({theme}) => ({
   paddingBottom: theme.spacing() / 2,
 }));
 
-function AppFooter(props) {
-  const {handleNavigate} = props;
+export default function AppFooter({navigate}) {
 
   function onClick(evt) {
     const url = new URL(evt.target.href);
     evt.preventDefault();
     evt.stopPropagation();
-    handleNavigate(url.pathname);
+    navigate(url.pathname);
   }
 
   return (
@@ -33,13 +32,13 @@ function AppFooter(props) {
         <Typography variant="h6" gutterBottom>Быстрые ссылки</Typography>
         <Typography variant="subtitle1" component="div">
           <Grid container spacing={0}>
-            <Grid item xs={12} sm={6}>
+            <Grid item size={{ xs: 12, sm: 6 }}>
               <Ul>
                 <Li><a href="/about" onClick={onClick}>О компании</a></Li>
                 <Li><a href="https://github.com/oknosoft/metadata.js">Metadata.js</a></Li>
               </Ul>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item size={{ xs: 12, sm: 6 }}>
               <Ul>
                 <Li><a href="/terms_of_use" onClick={onClick}>Пользовательское соглашение</a></Li>
                 <Li><a href="/privacy_policy" onClick={onClick}>Обработка персональных данных</a></Li>
@@ -52,8 +51,3 @@ function AppFooter(props) {
   );
 }
 
-AppFooter.propTypes = {
-  handleNavigate: PropTypes.func.isRequired,
-};
-
-export default AppFooter;

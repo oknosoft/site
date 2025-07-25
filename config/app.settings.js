@@ -8,6 +8,32 @@
 
 const is_node = typeof process !== 'undefined' && process.versions && process.versions.node;
 const local_storage_prefix = 'www_';
+const env = is_node ? process.env : 0;
+
+class JSVersion {
+
+  constructor() {
+    this.fetch()
+      .then((version) => {
+        this.raw = version || {build: "network error", stamp: 0};
+        this.stamp = this.raw.stamp
+      });
+  }
+
+  fetch() {
+    return fetch('/build.json')
+      .then(res => res.json())
+      .catch(err => null);
+  }
+
+  check() {
+    return this.fetch()
+      .then((version) => {
+        return !this.stamp || this.stamp === version.stamp;
+      });
+  }
+
+}
 
 module.exports = function settings(prm = {}) {
 
@@ -15,6 +41,11 @@ module.exports = function settings(prm = {}) {
     use_google_geo: {
       get() {
         return '';
+      }
+    },
+    session_zone: {
+      get() {
+        return typeof sessionStorage === 'object' && sessionStorage.key('zone') ? sessionStorage.getItem('zone') : this.zone;
       }
     }
   });
@@ -30,7 +61,7 @@ module.exports = function settings(prm = {}) {
     guests: [],
 
     // расположение couchdb для nodejs
-    couch_local: process.env.COUCHLOCAL || 'http://cou221:5984/www_',
+    couch_local: env?.COUCHLOCAL || `http://cou221:5984/${local_storage_prefix}`,
 
     // расположение couchdb для браузера
     get couch_path() {
@@ -46,7 +77,7 @@ module.exports = function settings(prm = {}) {
     // если use_meta === false, не используем базу meta в рантайме
     // см.: https://github.com/oknosoft/metadata.js/issues/255
     use_meta: false,
-    use_ram: is_node ? true : false,
+    use_ram: Boolean(is_node),
 
     // размер вложений 5Mb
     attachment_max_size: 5000000,
@@ -64,17 +95,17 @@ module.exports = function settings(prm = {}) {
 
     server: {
       prefix: '/adm/api',             // Mount path, no trailing slash
-      port: process.env.PORT || 3033, // Port
-      lang: process.env.LANG || 'ru', // язык текущего экземпляра
-      start_common: Boolean(process.env.START_COMMON),
-      common_url: process.env.RAMURL || 'http://localhost:3036',
+      port: env?.PORT || 3033, // Port
+      lang: env?.LANG || 'ru', // язык текущего экземпляра
+      start_common: Boolean(env?.START_COMMON),
+      common_url: env?.RAMURL || 'http://localhost:3036',
       maxpost: 40 * 1024 * 1024,      // Max size of POST request
-      abonents: process.env.ABONENTS ? JSON.parse(process.env.ABONENTS) : [0], // абоненты - источники
-      branches: process.env.BRANCHES ? JSON.parse(process.env.BRANCHES) : null,     // список отделов можно ограничить
+      abonents: env?.ABONENTS ? JSON.parse(env?.ABONENTS) : [0], // абоненты - источники
+      branches: env?.BRANCHES ? JSON.parse(env?.BRANCHES) : null,     // список отделов можно ограничить
       single_db: true,                                    // использовать основную базу doc вместо перебора баз абонентов
-      no_mdm: Boolean(process.env.NOMDM),
-      disable_mdm: Boolean(process.env.DISABLEMDM),
-      defer: (process.env.DEFER ? parseFloat(process.env.DEFER) : 20000) + Math.random() * 10000,  // задержка пересчета mdm
+      no_mdm: Boolean(env?.NOMDM),
+      disable_mdm: Boolean(env?.DISABLEMDM),
+      defer: (env?.DEFER ? parseFloat(env?.DEFER) : 20000) + Math.random() * 10000,  // задержка пересчета mdm
       rater: {                        // Request rate locker
         all: {                        // Total requests limit
           interval: 4,                // Seconds, collect interval
@@ -88,8 +119,8 @@ module.exports = function settings(prm = {}) {
     },
 
     workers: {
-      count: process.env.WORKERS_COUNT ? parseFloat(process.env.WORKERS_COUNT) : 1,  // Total threads
-      reloadAt: process.env.RELOAD_AT ? parseFloat(process.env.RELOAD_AT) : 3,       // Hour all threads are restarted
+      count: env?.WORKERS_COUNT ? parseFloat(env?.WORKERS_COUNT) : 1,  // Total threads
+      reloadAt: env?.RELOAD_AT ? parseFloat(env?.RELOAD_AT) : 3,       // Hour all threads are restarted
       reloadOverlap: 40e3,      // Gap between restarts of simultaneous threads
       killDelay: 10e3           // Delay between shutdown msg to worker and kill, ms
     },
@@ -97,10 +128,13 @@ module.exports = function settings(prm = {}) {
   }, is_node && {
     // авторизация couchdb
     user_node: {
-      username: process.env.DBUSER || 'admin',
-      password: process.env.DBPWD || 'admin',
-      secret: process.env.COUCHSECRET,
+      username: env?.DBUSER || 'admin',
+      password: env?.DBPWD || 'admin',
+      secret: env?.COUCHSECRET,
     },
   });
+
+  // текущая версия js
+  prm.version = new JSVersion();
 
 };

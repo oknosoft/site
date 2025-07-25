@@ -84,7 +84,7 @@ export function item_props(path) {
     path = location.pathname;
   }
   if(path.endsWith('/')) {
-    path = path.substr(0, path.length - 1);
+    path = path.substring(0, path.length - 1);
   }
 
   if(path.indexOf('password-reset') !== -1) {
@@ -94,7 +94,7 @@ export function item_props(path) {
   // здесь можно переопределить нужность meta и авторизованности для корневой страницы
   let res = with_recursion(path, items);
   if(!res && path.indexOf('/') !== -1) {
-    res = with_recursion(path.substr(0, path.lastIndexOf('/')), items);
+    res = with_recursion(path.substring(0, path.lastIndexOf('/')), items);
   }
   if(!res && path.match(/\/(doc|cat|ireg|cch|rep)\./)){
     res = {need_meta: true, need_user: false};

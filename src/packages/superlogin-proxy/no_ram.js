@@ -17,15 +17,9 @@ const page = {
   }
 };
 
-export function load_ram({adapters: {pouch}, md}, types) {
+function load_fin(pouch) {
   const {props} = pouch;
-  const headers = new Headers();
-  if(types) {
-    headers.set('types', types.join(','));
-  }
-  const zone = sessionStorage.getItem('zone') || props.zone;
-  return pouch.fetch(`/couchdb/mdm/${zone}/${props._suffix}`, {headers})
-    .then(stream_load(md, pouch))
+  return Promise.resolve()
     .then(() => {
       props._data_loaded = true;
       pouch.emit('pouch_data_loaded');
@@ -39,6 +33,39 @@ export function load_ram({adapters: {pouch}, md}, types) {
       props._doc_ram_loaded = true;
       pouch.emit('pouch_doc_ram_loaded');
     });
+}
+
+export function load_ram({adapters: {pouch}, md}, types) {
+  const {props} = pouch;
+  const headers = new Headers();
+  if(types) {
+    headers.set('types', types.join(','));
+  }
+  const zone = sessionStorage.getItem('zone') || props.zone;
+  return pouch.fetch(`/couchdb/mdm/${zone}/${props._suffix}`, {headers})
+    .then(stream_load(md, pouch))
+    .then(() => load_fin(pouch));
+}
+
+export async function load_ram_splitted({adapters: {pouch}, md}) {
+  const {props} = pouch;
+  const zone = sessionStorage.getItem('zone') || props.zone;
+  const load_order = md.order();
+  const {common, manifest} = md.order;
+  const load_part = stream_load(md, pouch, true);
+  pouch.emit('pouch_load_start', page)
+  for(const names of load_order) {
+    for(const name of names) {
+      if(!common.includes(name)) {
+        const meta = md.get(name);
+        if(meta?.cachable === 'ram' && !meta.deferred && !meta.joint) {
+          // выполняем запрос
+          await pouch.fetch(`/couchdb/mdm/${zone}/${props._suffix}?type=${name}`).then(load_part);
+        }
+      }
+    }
+  }
+  load_fin(pouch);
 }
 
 // загружает данные, которые не зависят от отдела абонента
@@ -62,7 +89,7 @@ export function load_common({adapters: {pouch}, md, msg}, types) {
     });
 }
 
-function stream_load(md, pouch) {
+function stream_load(md, pouch, splitted) {
 
   function load(part) {
     const data = JSON.parse(part);
@@ -82,11 +109,13 @@ function stream_load(md, pouch) {
         descr = await res.json();
       }
       catch (e) {}
-      throw new Error(`${status}: ${descr.message || statusText}`);
+      throw new Error(`${status}: ${descr?.message || statusText}`);
     }
 
-    page.add(JSON.parse(headers.get('manifest')));
-    page.page && pouch.emit('pouch_load_start', page);
+    if(!splitted) {
+      page.add(JSON.parse(headers.get('manifest')));
+      page.page && pouch.emit('pouch_load_start', page);
+    }
 
     let chunks = '', tmp;
 
