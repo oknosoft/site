@@ -16,7 +16,7 @@ import menuItems from '../App/menu';
 
 const DrawerLeft = ({menu_open, sxColor, handleDrawerClose}) => {
 
-  const navigate = useNavigate();
+  const handleNavigate = useNavigate();
   //$p.ui.dialogs.handleNavigate = navigate;
 
   return <Drawer
@@ -34,7 +34,7 @@ const DrawerLeft = ({menu_open, sxColor, handleDrawerClose}) => {
   >
     <DrawerHeader sx={{...sxColor, boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 7%)'}}>
       <ListItem sx={{flex: 1}} disablePadding onClick={() => {
-        navigate('/');
+        handleNavigate('/');
         if (disablePermanent) {
           handleDrawerClose();
         }
@@ -52,12 +52,12 @@ const DrawerLeft = ({menu_open, sxColor, handleDrawerClose}) => {
     </DrawerHeader>
     <Divider />
     <List>
-      {menuItems.map(({text, icon, path, divider}, index) => {
+      {menuItems.map(({text, icon, navigate, divider}, index) => {
         return divider ?
           <Divider key={`divider-${index}`} /> :
           <ListItem key={`menu-${index}`} disablePadding>
             <ListItemButton onClick={() => {
-              navigate(path);
+              handleNavigate(navigate);
               if (disablePermanent) {
                 handleDrawerClose();
               }

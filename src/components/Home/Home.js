@@ -52,7 +52,7 @@ export default function PageHome() {
         <Grid container alignItems="stretch" direction="column" justify="space-around">
 
           <Grid item>
-            <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => navigate('/articles/products')}>
+            <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => navigate('/products')}>
               <Grid size={{ xs: 0, sm: 1 }}/>
               <Grid item>
                 <ShoppingBasket alt="Продукты" sx={classes.logo} color="disabled"/>
@@ -65,7 +65,7 @@ export default function PageHome() {
           </Grid>
 
           <Grid item>
-            <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => navigate('/contents/')}>
+            <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => navigate('/articles')}>
               <Grid size={{ xs: 0, sm: 1 }}/>
               <Grid item>
                 <LibraryBooks alt="Статьи" sx={classes.logo} color="disabled"/>
@@ -80,7 +80,7 @@ export default function PageHome() {
           </Grid>
 
           <Grid item>
-            <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => navigate('/flowcon/diagram')}>
+            <Grid container sx={classes.menu} spacing={2} wrap="nowrap" onClick={() => navigate('/apidocs')}>
               <Grid size={{ xs: 0, sm: 1 }}/>
               <Grid item>
                 <Flask alt="Flowcon Logo" sx={classes.logo} color="disabled"/>

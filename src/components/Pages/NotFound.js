@@ -9,6 +9,7 @@ export default function Page(props) {
   const {setTitle} = useTitleContext();
   return <MarkdownDocs
     {...props}
+    htitle="Страница не найдена"
     subtitle="Окнософт"
     markdown={markdown}
     descr={description}

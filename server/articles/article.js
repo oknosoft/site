@@ -28,18 +28,12 @@ const cache = {
 module.exports = async (req, res, articles, log) => {
   let {query, path} = req.parsed;
   path = path.replace(/^\//, '');
-
-  if(!path || path.startsWith('index')) {
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.end(await fill());
-    return true;
-  }
-
   const slash = /(\.html|\/)$/.test(path);
   if(slash) {
     path = path.replace(/(\.html|\/)$/, '');
   }
   const article = articles._aliases[path];
+
   if(article) {
     // если статья найдена, но кривой путь
     if(path !== article.id || slash || query) {
@@ -56,6 +50,11 @@ module.exports = async (req, res, articles, log) => {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.end(await fill(article));
     }
+  }
+  else if(!path || path.startsWith('index')) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.end(await fill());
+    return true;
   }
   else {
     // если статья не найдена

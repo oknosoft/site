@@ -10,6 +10,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import IconContents from '@mui/icons-material/FormatListNumbered';
+import { useLocation } from 'react-router';
 
 import MarkdownDocs from 'metadata-ui/Markdown/MarkdownDocs';
 import NotFound from '../Pages/NotFound';  // 404
@@ -23,9 +24,12 @@ const components = {Footer, Contents};
 
 const cprefix = '/couchdb/www_0_ram/cat.articles|';
 
-function Article({title, handleIfaceState, handleNavigate}) {
+const handleIfaceState = (...attr) => console.log(...attr);
+
+function Article({title}) {
   const {setTitle} = useTitleContext();
   const [doc, setDoc] = React.useState(null);
+  const location = useLocation();
   const ref = location.pathname;
 
   React.useEffect(() => {
@@ -53,13 +57,12 @@ function Article({title, handleIfaceState, handleNavigate}) {
     return <Loading />;
   }
   if(doc === 404 || doc instanceof Error) {
-    return <NotFound title={title} handleIfaceState={handleIfaceState} handleNavigate={handleNavigate} />;
+    return <NotFound title={title}  />;
   }
   const mprops = {
     title,
     htitle: doc.name || 'без названия',
     handleIfaceState,
-    handleNavigate,
     h1: doc.h1,
     descr: doc.descr,
     img: doc.img || '/imgs/flask_192.png',
@@ -68,20 +71,25 @@ function Article({title, handleIfaceState, handleNavigate}) {
       .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`),
     footer: [],
     setTitle,
+    components,
+    sx: {minHeight: 'calc(100vh - 196px)', mb: doc.footer ? 2 : 6},
   };
-  if(ref !== `/${doc.id}`) {
-    mprops.canonical = location.href.replace(ref, `/${doc.id}`);
-  }
-  if(!ref) {
-    mprops.TopButton = <IconButton
-      onClick={() => handleNavigate(doc.id)}
-      title="Перейти к оглавлению"
-    >
-      <IconContents />
-    </IconButton>;
-  }
+
+  // if(ref !== `/${doc.id}`) {
+  //   mprops.canonical = location.href.replace(ref, `/${doc.id}`);
+  // }
+
+  // if(!ref) {
+  //   mprops.TopButton = <IconButton
+  //     onClick={() => handleNavigate(doc.id)}
+  //     title="Перейти к оглавлению"
+  //   >
+  //     <IconContents />
+  //   </IconButton>;
+  // }
+
   if(doc.category.is('contents')) {
-    mprops.markdown += `\n<Contents ref="${doc.ref}"/>`;
+    mprops.markdown += `\n{<Contents docRef="${doc.ref}"/>}\n`;
   }
   if(doc.category.is('file')) {
     mprops.footer.push(
@@ -89,11 +97,15 @@ function Article({title, handleIfaceState, handleNavigate}) {
         <Attachments _obj={doc} handleIfaceState={handleIfaceState} />
       </React.Suspense>);
   }
-  if(doc.category.is('file') || doc.category.is('news') || doc.category.is('article')) {
+  if(doc.social) {
     mprops.footer.push(<Social key="social" title={doc.name}/>);
   }
 
-  return <MarkdownDocs {...mprops}/>;
+  const main = <MarkdownDocs {...mprops}/>;
+  return doc.footer ? <>
+    {main}
+    <Footer/>
+  </> : main;
 }
 
 

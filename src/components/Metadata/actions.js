@@ -51,6 +51,9 @@ export function actions(handleIfaceState) {
       handleIfaceState({common_loaded: true});
       //ui.dialogs.init({handleIfaceState, handleNavigate, {}});
 
+      const {remote, fetch} = pouch;
+      remote.ram = new PouchDB(pouch.dbpath('ram'), {skip_setup: true, owner: pouch, fetch});
+
       pouch.on({
         pouch_complete_loaded() {
           handleIfaceState({complete_loaded: true});

@@ -7,6 +7,7 @@ import IconSettings from '@mui/icons-material/Settings';
 import LibraryBooks from '@mui/icons-material/LibraryBooks';
 import FiberNew from '@mui/icons-material/FiberNew';
 import IconDownload from '@mui/icons-material/CloudDownload';
+import ShoppingBasket from '@mui/icons-material/ShoppingBasket';
 import IconHelp from '@mui/icons-material/Help';
 import IconAccessibility from '@mui/icons-material/AccessibilityNew';
 // import Flask from '../../styles/icons/Flask';
@@ -18,11 +19,11 @@ export {description};
 
 const items = [
   {
-    text: 'Новости',
-    icon: <FiberNew/>,
-    id: 'news',
+    text: 'Продукты',
+    icon: <ShoppingBasket/>,
+    id: 'products',
     //bold: true,
-    navigate: '/news/',
+    navigate: '/products',
     need_meta: true,
   },
   {
@@ -30,7 +31,7 @@ const items = [
     icon: <LibraryBooks/>,
     id: 'articles',
     //bold: true,
-    navigate: '/contents/',
+    navigate: '/articles',
     need_meta: true,
   },
   {
@@ -38,9 +39,17 @@ const items = [
     icon: <IconDownload/>,
     id: 'files',
     //bold: true,
-    navigate: '/files/',
+    navigate: '/files',
     need_meta: true,
   },
+  // {
+  //   text: 'Новости',
+  //   icon: <FiberNew/>,
+  //   id: 'news',
+  //   //bold: true,
+  //   navigate: '/news',
+  //   need_meta: true,
+  // },
   {
     divider: true,
   },
@@ -50,14 +59,14 @@ const items = [
     need_meta: true,
     icon: <IconPerson/>
   },
+  // {
+  //   text: 'Настройки',
+  //   navigate: '/settings',
+  //   need_meta: true,
+  //   icon: <IconSettings/>,
+  // },
   {
-    text: 'Настройки',
-    navigate: '/settings',
-    need_meta: true,
-    icon: <IconSettings/>,
-  },
-  {
-    text: 'О сайте',
+    text: 'О компании',
     navigate: '/about',
     icon: <IconInfo/>
   }

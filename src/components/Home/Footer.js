@@ -40,8 +40,8 @@ export default function AppFooter({navigate}) {
             </Grid>
             <Grid item size={{ xs: 12, sm: 6 }}>
               <Ul>
-                <Li><a href="/terms_of_use" onClick={onClick}>Пользовательское соглашение</a></Li>
-                <Li><a href="/privacy_policy" onClick={onClick}>Обработка персональных данных</a></Li>
+                <Li><a href="/articles/terms-of-use" onClick={onClick}>Пользовательское соглашение</a></Li>
+                <Li><a href="/articles/privacy-policy" onClick={onClick}>Обработка персональных данных</a></Li>
               </Ul>
             </Grid>
           </Grid>
