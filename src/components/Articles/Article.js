@@ -20,7 +20,8 @@ import Footer from '../Home/Footer';
 import {useTitleContext} from '../App';
 const Attachments = React.lazy(() => import('./Attachments'));
 const Contents = React.lazy(() => import('./Contents'));
-const components = {Footer, Contents};
+const ImgList = React.lazy(() => import('./ImgList'));
+const components = {Footer, Contents, ImgList};
 
 const cprefix = '/couchdb/www_0_ram/cat.articles|';
 
@@ -68,12 +69,15 @@ function Article({title}) {
     img: doc.img || '/imgs/flask_192.png',
     markdown: (doc.content || 'текст отсутствует')
       .replace(/\!\[image\]\(this/gm, `![image](${cprefix}${doc.ref}`)
-      .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`),
+      .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`)
+      .replace(/~\//gm, `${cprefix}${doc.ref}/`),
     footer: [],
     setTitle,
     components,
-    sx: {minHeight: 'calc(100vh - 196px)', mb: doc.footer ? 2 : 6},
   };
+  if(doc.footer) {
+    mprops.sx = {minHeight: 'calc(100vh - 220px)', mb: 2};
+  }
 
   // if(ref !== `/${doc.id}`) {
   //   mprops.canonical = location.href.replace(ref, `/${doc.id}`);

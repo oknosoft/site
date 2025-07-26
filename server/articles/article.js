@@ -6,6 +6,7 @@ const {resolve} = require('path');
 const {appBuild} = require('../../config/paths');
 const {readFile} = require('node:fs/promises');
 const marked = require('../../lib/marked.cjs');
+const slashRegex = /(\.html|\.html\?|\/)$/;
 
 const cache = {
   title: 'Окнософт',
@@ -28,9 +29,9 @@ const cache = {
 module.exports = async (req, res, articles, log) => {
   let {query, path} = req.parsed;
   path = path.replace(/^\//, '');
-  const slash = /(\.html|\/)$/.test(path);
+  const slash = slashRegex.test(path);
   if(slash) {
-    path = path.replace(/(\.html|\/)$/, '');
+    path = path.replace(slashRegex, '');
   }
   const article = articles._aliases[path];
 
