@@ -41,6 +41,7 @@ export function actions(handleIfaceState) {
     .then((module) => module.init(handleIfaceState))
     .then(() => {
       // font-awesome, roboto и стили metadata подгрузим асинхронно
+      import('font-awesome/css/font-awesome.min.css');
       import('metadata-ui/fontsource/roboto/300.css');
       import('metadata-ui/fontsource/roboto/400.css');
       import('metadata-ui/fontsource/roboto/500.css');

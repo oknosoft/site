@@ -21,7 +21,8 @@ import {useTitleContext} from '../App';
 const Attachments = React.lazy(() => import('./Attachments'));
 const Contents = React.lazy(() => import('./Contents'));
 const ImgList = React.lazy(() => import('./ImgList'));
-const components = {Footer, Contents, ImgList};
+const ImgCarousel = React.lazy(() => import('./ImgCarousel'));
+const components = {Footer, Contents, ImgList, ImgCarousel};
 
 const cprefix = '/couchdb/www_0_ram/cat.articles|';
 
@@ -49,6 +50,7 @@ function Article({title}) {
           throw new Error(raw.message);
         }
         articles.load_array([raw]);
+        document.getElementsByTagName('main')?.[0]?.scrollIntoView();
         return setDoc(articles.get(raw.ref));
       })
       .catch(err => setDoc(err));
@@ -66,11 +68,13 @@ function Article({title}) {
     handleIfaceState,
     h1: doc.h1,
     descr: doc.descr,
-    img: doc.img || '/imgs/flask_192.png',
+    img: doc.img ? doc.img.replace('~/', `${cprefix}${doc.ref}/`) : '/imgs/flask_192.png',
     markdown: (doc.content || 'текст отсутствует')
+      .replace(/(?<=<ssr>)[\s\S]+?(?=<\/ssr>)/gm, '')
       .replace(/\!\[image\]\(this/gm, `![image](${cprefix}${doc.ref}`)
       .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`)
-      .replace(/~\//gm, `${cprefix}${doc.ref}/`),
+      .replace(/~\//gm, `${cprefix}${doc.ref}/`)
+      .replace(/(<ssr><\/ssr>)/g, ''),
     footer: [],
     setTitle,
     components,

@@ -78,27 +78,34 @@ async function fill(doc) {
     const descr = doc.descr || doc.introduction;
     html = html.replace(
       `<title>${cache.title}</title>`,
-      `<title>${title}</title>`);
-    html = html.replace(
+      `<title>${title}</title>`)
+      .replace(
       `<meta property="og:title" content="${cache.title}" data-react-helmet="true">`,
-      `<meta property="og:title" content="${title}" data-react-helmet="true">`);
-    html = html.replace(
+      `<meta property="og:title" content="${title}" data-react-helmet="true">`)
+      .replace(
       `<meta name="description" content="${cache.description}" data-react-helmet="true">`,
-      `<meta name="description" content="${descr}" data-react-helmet="true">`);
-    html = html.replace(
+      `<meta name="description" content="${descr}" data-react-helmet="true">`)
+      .replace(
       `<meta property="og:description" content="${cache.description}" data-react-helmet="true">`,
-      `<meta property="og:description" content="${descr}" data-react-helmet="true">`);
-    html = html.replace(
+      `<meta property="og:description" content="${descr}" data-react-helmet="true">`)
+      .replace(
       `<div id="root"></div>`,
       `<div id="root"><div style="max-width: 960px; padding: 48px 8px; margin: auto; color: #777;">
-<h1>${doc.h1 || doc.name}</h1>${marked.parse(
+<h1>${doc.h1 || doc.name}</h1>
+${marked.parse(
         (doc.content || '')
+          .replace(/ssr>/gm, `div>`)
           .replace(/!\[image]\(this/gm, `![image](${cache.cprefix}${doc.ref}`)
-          .replace(/src="this\//gm, `src="${cache.cprefix}${doc.ref}/`),
-      )}</div></div>`);
+          .replace(/src="this\//gm, `src="${cache.cprefix}${doc.ref}/`)
+          .replace(/~\//gm, `${cache.cprefix}${doc.ref}/`)
+          .replace(/(?<={<)[\s\S]+?(?=<\/>})/gm, ''),
+      )}
+${doc.category.is('contents') ? doc.articles
+        .map(({paper}) => `<a href="/${paper.id}" style="display: list-item;">${paper.name}</a>`)
+        .join('\n') : ''}</div></div>`);
 
     if(doc.img) {
-      html = html.replace(`${cache.su}/imgs/flask_192.png`, doc.img);
+      html = html.replace(`${cache.su}/imgs/flask_192.png`, doc.img.replace('~/', `${cache.cprefix}${doc.ref}/`));
     }
   }
   return html;

@@ -37,6 +37,7 @@
     "@types/react": "^19.1",
     "clsx": "^2.1",
     "font-awesome": "4.7.0",
+    "framer-motion": "^12.23.9",
     "marked": "^16.1",
     "marked-base-url": "^1.1",
     "metadata-core": "2.0.37-beta.1",
