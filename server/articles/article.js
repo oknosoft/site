@@ -98,7 +98,7 @@ ${marked.parse(
           .replace(/!\[image]\(this/gm, `![image](${cache.cprefix}${doc.ref}`)
           .replace(/src="this\//gm, `src="${cache.cprefix}${doc.ref}/`)
           .replace(/~\//gm, `${cache.cprefix}${doc.ref}/`)
-          .replace(/(?<={<)[\s\S]+?(?=<\/>})/gm, ''),
+          .replace(/({<.*?>})/gm, ''),
       )}
 ${doc.category.is('contents') ? doc.articles
         .map(({paper}) => `<a href="/${paper.id}" style="display: list-item;">${paper.name}</a>`)

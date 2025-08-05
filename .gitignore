@@ -18,6 +18,7 @@
 # Exclude compiled files
 /build
 /scripts/stats.json
+/lib/imgs
 /public/data/
 /public/imgs/stories/
 /server/mdm/cache/

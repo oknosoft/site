@@ -70,11 +70,10 @@ function Article({title}) {
     descr: doc.descr,
     img: doc.img ? doc.img.replace('~/', `${cprefix}${doc.ref}/`) : '/imgs/flask_192.png',
     markdown: (doc.content || 'текст отсутствует')
-      .replace(/(?<=<ssr>)[\s\S]+?(?=<\/ssr>)/gm, '')
+      .replace(/(<ssr[\s\S]+?\/ssr>)/gm, '')
       .replace(/\!\[image\]\(this/gm, `![image](${cprefix}${doc.ref}`)
       .replace(/src="this\//gm, `src="${cprefix}${doc.ref}/`)
-      .replace(/~\//gm, `${cprefix}${doc.ref}/`)
-      .replace(/(<ssr><\/ssr>)/g, ''),
+      .replace(/~\//gm, `${cprefix}${doc.ref}/`),
     footer: [],
     setTitle,
     components,

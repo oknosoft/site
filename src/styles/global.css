@@ -9,7 +9,6 @@ html, body, input, textarea, select, button {
   color: rgb(48, 57, 66);
   font-family: Roboto, Arial, sans-serif;
   font-size: 100%;
-  line-height: 21px;
   text-rendering: optimizeLegibility;
 }
 .splash {
