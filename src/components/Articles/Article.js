@@ -18,11 +18,7 @@ import Social from './Social';
 import Loading from '../App/Loading';
 import Footer from '../Home/Footer';
 import {useTitleContext} from '../App';
-const Attachments = React.lazy(() => import('./Attachments'));
-const Contents = React.lazy(() => import('./Contents'));
-const ImgList = React.lazy(() => import('./ImgList'));
-const ImgCarousel = React.lazy(() => import('./ImgCarousel'));
-const components = {Footer, Contents, ImgList, ImgCarousel};
+import * as components from './components';
 
 const cprefix = '/couchdb/www_0_ram/cat.articles|';
 
