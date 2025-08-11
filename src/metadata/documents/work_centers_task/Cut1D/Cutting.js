@@ -2,6 +2,8 @@ import React from 'react';
 import {NumberFormatter, NumberCell} from 'metadata-ui/DataField/Number';
 import ObjTabular from 'metadata-ui/TabularSection';
 
+import {nom} from './testData';
+
 const columns = [
   {key: "len", name: "Размеры изделий", renderCell: NumberFormatter, renderEditCell: NumberCell},
 ];
@@ -15,6 +17,7 @@ export default function ObjCutting({obj}) {
     tabRef={tabRef}
     tabular={obj.cutting}
     columns={columns}
+    selection={{nom}}
   />;
 }
 

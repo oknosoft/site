@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
 import ObjCuts from './Cuts';
 import ObjCutting from './Cutting';
+import CutTabs from './CutTabs';
 
 export default function Cut1D({obj}) {
 
@@ -14,11 +15,8 @@ export default function Cut1D({obj}) {
     <Grid size={{ xs: 12, md: 2 }}>
       <ObjCuts obj={obj} />
     </Grid>
-    <Grid size={{ xs: 12, md: 2 }}>
-      Параметры
-    </Grid>
-    <Grid size={{ xs: 12, md: 6 }}>
-      Оптимизация
+    <Grid size={{ xs: 12, md: 8 }}>
+      <CutTabs obj={obj} />
     </Grid>
   </Grid>;
 }

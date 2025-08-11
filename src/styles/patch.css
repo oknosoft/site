@@ -1,5 +1,5 @@
 .rdg.fill-grid {
-  block-size: 100%;
+  /*block-size: 100%;*/
   overflow-y: scroll;
 }
 .rdg.small-grid {

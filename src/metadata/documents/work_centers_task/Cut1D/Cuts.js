@@ -1,12 +1,11 @@
 import React from 'react';
 import {NumberFormatter, NumberCell} from 'metadata-ui/DataField/Number';
 import ObjTabular from 'metadata-ui/TabularSection';
+import {record_kind, nom} from './testData';
 
 const columns = [
   {key: "len", name: "Заготовки", renderCell: NumberFormatter, renderEditCell: NumberCell},
 ];
-
-const record_kind = $p.enm.debit_credit_kinds.debit;
 
 export default function ObjCuts({obj}) {
   const tabRef = React.useRef(null);
@@ -15,7 +14,7 @@ export default function ObjCuts({obj}) {
     tabRef={tabRef}
     tabular={obj.cuts}
     columns={columns}
-    selection={{record_kind}}
+    selection={{record_kind, nom}}
   />;
 }
 

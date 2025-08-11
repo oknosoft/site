@@ -30,9 +30,11 @@ const common = [
   'cat.destinations',
   'cat.nom_groups',
   'cat.nom_kinds',
+  'cat.nom',
   'cat.organizations',
   'cat.partners',
   'cat.tags',
+  'cch.predefined_elmnts',
 ];
 
 function mdm ($p, log) {

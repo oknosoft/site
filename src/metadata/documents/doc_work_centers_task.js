@@ -383,10 +383,11 @@ exports.DocWork_centers_task = class DocWork_centers_task extends Object {
     for(const [nom, characteristics] of noms) {
       for(const characteristic of characteristics) {
         this.cuts.find_rows({nom, characteristic}, (row) => {
-          if(row.record_kind.is('credit') || (!row.width && row.len === nom.len) || (row.width === nom.width && row.len === nom.len)) {
+          if(row.record_kind.is(kind === '1D' ? 'debit' : 'credit') || (!row.width && row.len === nom.len) || (row.width === nom.width && row.len === nom.len)) {
             rm.push(row);
           }
           else {
+            row.used = 0;
             row.dop = {svg: ''};
           }
         });

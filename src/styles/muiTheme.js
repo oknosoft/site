@@ -20,7 +20,7 @@ const theme = createTheme({
   },
 
   typography: {
-    fontSize: 13,
+    fontSize: 12.7,
     fontWeightMedium: 400,
     fontWeightRegular: 300,
     // h3: {
