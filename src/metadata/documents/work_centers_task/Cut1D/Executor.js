@@ -28,7 +28,7 @@ export default function CutExecutor({obj, tab}) {
     obj.reset_sticks('1D');
     obj.optimize({onStep})
       .then(state => {
-        setTimeout(() => setStatuses([]), 1000);
+        setTimeout(() => setStatuses([]), 200);
       })
       .catch(err => {
         err;

@@ -62,7 +62,7 @@ module.exports = function ($p, log, worker) {
         parsed.is_mdm = parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'mdm';
         parsed.is_log = parsed.paths[0] === 'couchdb' && /_log$/.test(parsed.paths[1]);
         parsed.is_event_source = parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'events';
-        parsed.is_static =  /^(static|imgs)$/.test(parsed.paths[0]) ||
+        parsed.is_static =  /^(static|imgs|images)$/.test(parsed.paths[0]) ||
           /\.(json|ico|txt|js|map|webmanifest)$/.test(parsed.paths[0]);
         req.query = qs.parse(parsed.query);
 

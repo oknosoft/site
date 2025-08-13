@@ -6,7 +6,7 @@ const {resolve} = require('path');
 const {appBuild} = require('../../config/paths');
 const {readFile} = require('node:fs/promises');
 const marked = require('../../lib/marked.cjs');
-const slashRegex = /(\.html|\.html\?|\/)$/;
+const slashRegex = /(\.html|\.html\?[\s\S]+?|\/)$/;
 
 const cache = {
   title: 'Окнософт',

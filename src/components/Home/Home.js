@@ -124,6 +124,6 @@ export default function PageHome() {
       </Grid>
     </Grid>
 
-    <AppFooter navigate={navigate}/>
+    <AppFooter />
   </Box>;
 }

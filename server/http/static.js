@@ -7,9 +7,10 @@ const paths = require('../../config/paths');
 
 module.exports = async (req, res) => {
   //await compressionHandler(req, res);
+
   return await handler(req, res, {
     cleanUrls: true,
-    'public': paths.appBuild,
+    'public': paths.public(req),
     headers: [
       {
         source: 'service-worker.js',

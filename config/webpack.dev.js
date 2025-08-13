@@ -26,7 +26,7 @@ module.exports = {
     },
     proxy: [
       {
-        context: ['/adm', '/auth', '/about', '/articles', '/couchdb', '/files', '/products', '/news', '/r/'],
+        context: ['/adm', '/auth', '/about', '/articles', '/couchdb', '/files', '/products', '/news', '/images', '/r/'],
         target: proxyTarget,
         secure: false,
         xfwd: true,
