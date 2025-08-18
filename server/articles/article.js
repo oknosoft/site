@@ -88,12 +88,14 @@ async function fill(doc) {
       .replace(
       `<meta property="og:description" content="${cache.description}" data-react-helmet="true">`,
       `<meta property="og:description" content="${descr}" data-react-helmet="true">`)
+      .replace(`content="article">`, `content="article">${doc.head}`)
       .replace(
       `<div id="root"></div>`,
       `<div id="root"><div style="max-width: 960px; padding: 48px 8px; margin: auto; color: #777;">
 <h1>${doc.h1 || doc.name}</h1>
 ${marked.parse(
         (doc.content || '')
+          .replace(/<ssr/gm, `<div`)
           .replace(/ssr>/gm, `div>`)
           .replace(/!\[image]\(this/gm, `![image](${cache.cprefix}${doc.ref}`)
           .replace(/src="this\//gm, `src="${cache.cprefix}${doc.ref}/`)
