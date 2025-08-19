@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
 import {useNavigate} from 'react-router';
 
 const Ul = styled('ul')(({theme}) => ({
@@ -32,8 +33,8 @@ export default function AppFooter() {
 
   return (
     <Box component="footer" sx={{overflow: 'auto'}}>
-      <Box p={4}>
-        <Typography variant="h6" gutterBottom sx={typographySx}>Быстрые ссылки</Typography>
+      <Box sx={{p: 3}}>
+        <Divider sx={{mb: 1}} flexItem />
         <Typography variant="subtitle1" component="div" sx={typographySx}>
           <Grid container spacing={0}>
             <Grid item size={{ xs: 12, sm: 3 }}>

@@ -23,22 +23,16 @@ export default function CutTabs({obj}) {
         value={0}
         icon={<BarChartIcon/>}
         iconPosition="start"
-        label="График"
+        label="Раскрой"
       />
       <Tab
         value={1}
         icon={<TableChartIcon/>}
         iconPosition="start"
-        label="Таблица"
-      />
-      <Tab
-        value={2}
-        icon={<TuneIcon/>}
-        iconPosition="start"
         label="Параметры"
       />
     </Tabs>
-    {tab === 2 ? <Params obj={obj} /> : <CutExecutor obj={obj} tab={tab} />}
+    {tab === 1 ? <Params obj={obj} /> : <CutExecutor obj={obj} tab={tab} />}
   </>;
 
 }
