@@ -28,7 +28,7 @@ const cache = {
 
 module.exports = async (req, res, articles, log) => {
   let {query, path} = req.parsed;
-  path = path.replace(/^\//, '');
+  path = decodeURI(path.replace(/^\//, ''));
   const slash = slashRegex.test(path);
   if(slash) {
     path = path.replace(slashRegex, '');

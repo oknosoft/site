@@ -9,9 +9,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import cn from 'clsx';
 
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import withStyles from '@mui/material/styles/withStyles';
 import ArticleRow from './ArticleRow';
 import {path} from './queryString';
 

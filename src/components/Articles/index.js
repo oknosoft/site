@@ -1,3 +1,3 @@
-import Router from './Router';
+import Article from './Article';
 
-export default Router;
+export default Article;

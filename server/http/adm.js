@@ -14,7 +14,7 @@ module.exports = function ($p, log) {
   // подключаем плагины
   //require('wb-parametric')($p, log, route);
 
-  return async (req, res) => {
+  return async (req, res, conf) => {
     const {query, path, paths} = req.parsed;
 
     try {

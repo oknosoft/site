@@ -9,9 +9,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import AppContent from 'metadata-react/App/AppContent';
 import SelectTags from 'metadata-react/DataField/SelectTags';
 //import InfiniteArticles from './InfiniteArticles';

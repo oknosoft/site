@@ -63,7 +63,8 @@ module.exports = function ($p, log, worker) {
         parsed.is_log = parsed.paths[0] === 'couchdb' && /_log$/.test(parsed.paths[1]);
         parsed.is_event_source = parsed.paths[0] === 'couchdb' && parsed.paths[1] === 'events';
         parsed.is_static =  /^(static|imgs|images)$/.test(parsed.paths[0]) ||
-          /\.(json|ico|txt|js|map|webmanifest)$/.test(parsed.paths[0]);
+          /\.(json|ico|txt|js|map|webmanifest)$/.test(parsed.paths[0]) ||
+          parsed.paths[0] === 'adm' && parsed.paths[1] === 'apidocs';
         req.query = qs.parse(parsed.query);
 
         if(parsed.is_static) {

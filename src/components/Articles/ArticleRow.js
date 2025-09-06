@@ -7,9 +7,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import FormGroup from '@material-ui/core/FormGroup';
-import Chip from '@material-ui/core/Chip';
+import Typography from '@mui/material/Typography';
+import FormGroup from '@mui/material/FormGroup';
+import Chip from '@mui/material/Chip';
 import cn from 'clsx';
 
 

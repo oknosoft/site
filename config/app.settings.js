@@ -106,6 +106,9 @@ module.exports = function settings(prm = {}) {
       no_mdm: Boolean(env?.NOMDM),
       disable_mdm: Boolean(env?.DISABLEMDM),
       defer: (env?.DEFER ? parseFloat(env?.DEFER) : 20000) + Math.random() * 10000,  // задержка пересчета mdm
+      paths: {
+        '/adm/apidocs/wbcore': '../wb-core/jsdoc/wbcore',
+      },
       rater: {                        // Request rate locker
         all: {                        // Total requests limit
           interval: 4,                // Seconds, collect interval

@@ -10,7 +10,8 @@ import {createBrowserRouter} from 'react-router';
 import RootWithDrawer from './RootWithDrawer';
 
 import Home from '../Home';
-import ArticlesRoute from '../Articles/Article';
+import Articles from '../Articles';
+import Apidocs from '../Apidocs';
 
 const DataRoute = () => 'DataRoute';
 const FrmLogin = () => 'FrmLogin';
@@ -28,7 +29,8 @@ export const router = createBrowserRouter([
       {path: "login", element: loginRoute},
       {path: "profile", element: loginRoute},
       {path: "password-reset", element: loginRoute},
-      {path: "*", element: <ArticlesRoute />},
+      {path: "apidocs/*", element: <Apidocs />},
+      {path: "*", element: <Articles />},
     ],
   },
 ]);

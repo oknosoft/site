@@ -47,7 +47,18 @@ function Article({title}) {
         }
         articles.load_array([raw]);
         document.getElementsByTagName('main')?.[0]?.scrollIntoView();
-        return setDoc(articles.get(raw.ref));
+        const doc = articles.get(raw.ref);
+        let parser;
+        for(const raw of doc.head.split('\n')) {
+          if(!parser) {
+            parser = new DOMParser()
+          }
+          const tag = parser.parseFromString(raw, 'text/xml').children[0];
+          if(tag.tagName.toLowerCase() === 'link' && tag.attributes.rel.value === 'stylesheet') {
+            $p.utils.load_script(tag.attributes.href.value, 'link');
+          }
+        }
+        return setDoc(doc);
       })
       .catch(err => setDoc(err));
   }, [ref]);
