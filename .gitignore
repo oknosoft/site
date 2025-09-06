@@ -17,11 +17,11 @@
 
 # Exclude compiled files
 /build
+/lib
 /scripts/stats.json
-/lib/images
-/public/data/
-/public/imgs/stories/
-/server/mdm/cache/
+/public/data
+/public/imgs
+/server/mdm/cache
 !/server/mdm/cache/.gitkeep
 
 # misc
