@@ -21,5 +21,17 @@ export default function WbCore() {
   }
 
   const {styleSheets, scripts, links, body, head} = doc;
-  return doc.children.length;
+  const header = body.querySelector("header");
+  return <div ref={(el) => {
+    if(el) {
+      while (el.children.length) {
+        el.removeChild(el.children[0]);
+      }
+      for(const elm of Array.from(body.children)) {
+        if(elm.tagName === 'DIV') {
+          el.appendChild(elm);
+        }
+      }
+    }
+  }} />;
 }

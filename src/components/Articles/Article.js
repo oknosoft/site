@@ -55,7 +55,7 @@ function Article({title}) {
           }
           const tag = parser.parseFromString(raw, 'text/xml').children[0];
           if(tag.tagName.toLowerCase() === 'link' && tag.attributes.rel.value === 'stylesheet') {
-            $p.utils.load_script(tag.attributes.href.value, 'link');
+            $p.utils.loadScript(tag.attributes.href.value, 'link');
           }
         }
         return setDoc(doc);

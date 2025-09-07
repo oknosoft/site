@@ -41,10 +41,16 @@ function Metadata({App, initialText}) {
   }, [first]);
 
   React.useEffect(() => {
-    const onresize = (event) => handleIfaceState({innerWidth});
+    let prev = 0;
+    const onresize = (event) => {
+      if(prev !== innerWidth) {
+        prev = innerWidth;
+        handleIfaceState({innerWidth});
+      }
+    };
     addEventListener('resize', onresize);
     return () => removeEventListener('resize', onresize);
-  });
+  }, []);
 
   const loading = <Loading {...ifaceState} html={initialText} />;
   const {meta_loaded, alert, wnd_portal} = ifaceState || {};

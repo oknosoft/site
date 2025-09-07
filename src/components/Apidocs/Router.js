@@ -8,7 +8,7 @@ const contents = <Contents />;
 export default function ApiRouter() {
   return <Routes>
     <Route path="/" element={contents} />
-    <Route path="wbcore" element={<WbCore />} />
+    <Route path="wbcore/*" element={<WbCore />} />
     <Route path="*" element={contents} />
   </Routes>;
 }
