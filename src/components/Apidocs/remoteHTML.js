@@ -16,7 +16,7 @@ export function remoteHTML({setDoc, root, path}) {
   React.useEffect(() => {
     // proxy к файлам api
 
-    fetch(`${root}${ref}`)
+    fetch(`${root}${ref}`, {headers: {Accept: 'text/plain'}})
       .then(res => {
         if(res.ok) {
           return res.text();
@@ -64,12 +64,11 @@ export function remoteHTML({setDoc, root, path}) {
           title: `Описание API ${xmlDoc.title}`,
           appTitle: <div ref={(el) => {
             if(el && !el.children.length) {
-              for(const elm of header.attributes) {
-                //el.setAttribute(elm.name, elm.value);
-              }
               for(const elm of header.children) {
                 el.appendChild(elm);
               }
+              const brand = el.querySelector('a.navbar-brand');
+              brand.attributes.style.value = 'background-image: url(/adm/apidocs/wbcore/img/flask.png);'
             }
           }} />
         });

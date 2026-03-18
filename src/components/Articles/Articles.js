@@ -1,133 +1,55 @@
-/**
- * Список статей, фильтруемый тэгами
- *
- * @module Articles
- *
- * Created by Evgeniy Malyarov on 17.04.2018.
- */
-
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import AppContent from 'metadata-react/App/AppContent';
-import SelectTags from 'metadata-react/DataField/SelectTags';
-//import InfiniteArticles from './InfiniteArticles';
-import InfiniteArticles from './MUiArticles';
-import {description} from '../App/menu';
-import {fromQuery} from './queryString';
-import IconContents from '@material-ui/icons/FormatListNumbered';
-import withStyles from './styles';
+import {useTitleContext} from '../App';
+import Loading from '../App/Loading';
 
-class Articles extends Component {
-
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      tags: [],
-      tagList: this.tagList(props.tagFilter)
-    };
-  }
-
-  handleChange = event => {
-    this.setState({ tags: event.target.value });
-  };
-
-  componentDidMount() {
-    this.shouldComponentUpdate(this.props);
-  }
-
-  tagList(tagFilter) {
-    const tagList = [];
-    $p.cat.tags.find_rows({category: {in: tagFilter}}, (tag) => tagList.push(tag));
-    return tagList;
-  }
-
-  shouldComponentUpdate({title, match, tagFilter}) {
-    if(title != this.ltitle || match.path !== this.props.match.path) {
-
-      if(match.path === '/articles') {
-        this.ltitle = 'Статьи';
-        this.title = this.ltitle + ' о программировании бизнеса';
-      }
-      else if(match.path === '/news') {
-        this.ltitle = 'Новости';
-        this.title = this.ltitle + ' и события';
-      }
-      else {
-        this.ltitle = 'Файлы';
-        this.title = this.ltitle + ' и дополнительные материалы';
-      }
-      this.props.handleIfaceState({
-        component: '',
-        name: 'title',
-        value: this.ltitle,
-      });
-
-      this.setState({tagList: this.tagList(tagFilter), tags: []});
-
-      return false;
-    }
-    return true;
-  }
-
-  render() {
-    const session = $p.superlogin.getSession();
-    const {handleNavigate, match, location, classes} = this.props;
-    const {tagList, tags} = this.state;
-    const prm = fromQuery();
-
-    return <AppContent >
-      <Helmet title={this.title}>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={match.path + (match.path.endsWith('/') ? '' : '/')} />
-        <meta property="og:title" content={this.title} />
-        <meta property="og:description" content={description} />
-      </Helmet>
-      <div className={classes.top}>
-        <div className={classes.container}>
-          <Typography variant="h5" component="h1" color="primary" className={classes.bottom}>{this.title}</Typography>
-          {match.path.indexOf('articles') !== -1 && <IconButton
-            onClick={() => handleNavigate('/contents/')}
-            title="Перейти к оглавлению"
-          >
-            <IconContents />
-          </IconButton>}
-        </div>
-        <SelectTags
-          tags={tags}
-          fullWidth
-          handleChange={this.handleChange}
-          tagList={tagList}
-        />
-        {
-          session && session.roles.indexOf('doc_full') !== -1 &&
-          <Button color="primary" size="small" onClick={() => handleNavigate('/cat.articles/list')}>Перейти к редактору статей</Button>
-        }
-
-        <InfiniteArticles
-          tags={tags}
-          tagList={tagList}
-          page={prm.page}
-          match={match}
-          location={location}
-          handleNavigate={handleNavigate}
-        />
-      </div>
-    </AppContent>;
-  }
+const cmap = {
+  files: 'file',
+  articles: 'article',
+}
+const tmap = {
+  files: {title: 'Файлы', appTitle: <Typography variant="h6" noWrap>Файлы</Typography>},
+  articles: {title: 'Статьи', appTitle: <Typography variant="h6" noWrap>Статьи</Typography>},
 }
 
-Articles.propTypes = {
-  match: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  tagFilter: PropTypes.array.isRequired,
-  handleNavigate: PropTypes.func.isRequired,
-  handleIfaceState: PropTypes.func.isRequired,
-};
+export default function Articles() {
 
-export default withStyles(Articles);
+  const {setTitle} = useTitleContext();
+  const location = useLocation();
+  const category = cmap[location.pathname.substring(1)];
+  const [docs, setDocs] = React.useState([]);
+  const navigate = useNavigate();
+  function onClick(evt) {
+    const url = new URL(evt.target.href);
+    evt.preventDefault();
+    evt.stopPropagation();
+    navigate(url.pathname);
+  }
+
+  React.useEffect(() => {
+    const {adapters: {pouch}, utils} = $p;
+    pouch.remote.ram.find({
+      selector: {
+        class_name: "cat.articles",
+        category,
+        published: true
+      },
+      fields: ["_id", "id", "aliases", "name", "descr", "date", "author", "sorting_field"],
+    })
+      .then(res => {
+        res.docs.forEach(v => {
+          if(!v.sorting_field) {
+            v.sorting_field = 0;
+          }
+        });
+        setDocs(res.docs.sort(utils.sort('sorting_field', 'desc')));
+      });
+
+    setTitle(tmap[location.pathname.substring(1)]);
+
+  }, [category]);
+
+  return docs.length ? docs.map(doc => <ul><li><a href={`/${doc.id}`} onClick={onClick}>{doc.name}</a></li></ul>) : <Loading />;
+
+}

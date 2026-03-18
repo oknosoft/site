@@ -1,6 +1,6 @@
 import React from 'react';
 import ImageListItem from '@mui/material/ImageListItem';
-import Carousel from 'metadata-ui/Carousel/Carousel';
+import Carousel from 'metadata-ui/Carousel/Carousel.js';
 
 export default function ImgCarousel({imgs}) {
   const items = imgs.split(',');
