@@ -7,6 +7,9 @@ module.exports = {
   lib: path.resolve(__dirname, "../lib"),
   public(req) {
     const {pathname} = req.parsed;
-    return (pathname.includes('images/') || pathname.includes('apidocs/')) ? this.lib : this.appBuild;
+    return (pathname.includes('images/') ||
+      pathname.includes('apidocs/')
+      || pathname.includes('ckeditor4')
+      || pathname.includes('jQueryGantt')) ? this.lib : this.appBuild;
   },
 };

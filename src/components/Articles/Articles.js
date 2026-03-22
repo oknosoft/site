@@ -50,6 +50,6 @@ export default function Articles() {
 
   }, [category]);
 
-  return docs.length ? docs.map(doc => <ul><li><a href={`/${doc.id}`} onClick={onClick}>{doc.name}</a></li></ul>) : <Loading />;
+  return docs.length ? docs.map((doc, index) => <ul key={`u-${index}`}><li><a href={`/${doc.id}`} onClick={onClick}>{doc.name}</a></li></ul>) : <Loading />;
 
 }

@@ -14,14 +14,16 @@ process.on('unhandledRejection', err => {
 });
 
 function rimraf(tmpPath) {
-  console.log('Чистим каталог build...');
+  console.log(`Чистим каталог ${tmpPath}...`);
   //return Promise.resolve();
   return new Promise((resolve, reject) => {
     fs.readdir(tmpPath, (err, files) => {
       if (!err) {
         try {
           for (let file of files) {
-            fs.rmSync(path.join(tmpPath, file), {recursive: true});
+            if(file !== 'imgs') {
+              fs.rmSync(path.join(tmpPath, file), {recursive: true});
+            }
           }
           resolve();
         }
@@ -37,11 +39,29 @@ function rimraf(tmpPath) {
 }
 
 function copyPublicFolder(appPublic) {
-  const appHtml = path.resolve(appPublic, 'index.html');
-  fs.copySync(appPublic, appBuild, {
-    dereference: true,
-    filter: file => file !== appHtml,
-  });
+
+  console.log(`Копируем статику из ${appPublic}...`);
+  //return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    fs.readdir(appPublic, (err, files) => {
+      if (!err) {
+        try {
+          for (let file of files) {
+            if(file !== 'imgs' && file !== 'index.html') {
+              fs.copySync(path.join(appPublic, file), path.join(appBuild, file), {dereference: true});
+            }
+          }
+          resolve();
+        }
+        catch (err) {
+          reject(err);
+        }
+      }
+      else {
+        reject(err);
+      }
+    });
+  })
 }
 
 function build(previousFileSizes) {
@@ -86,7 +106,7 @@ function build(previousFileSizes) {
   });
 }
 
-rimraf(path.resolve(__dirname, '../build'))
+rimraf(appBuild)
   .then(() => build(0))
   .then(() => copyPublicFolder(path.resolve(__dirname, '../public')))
   .catch(console.error);
