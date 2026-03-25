@@ -1,10 +1,9 @@
 import React from 'react';
-//import { Editor } from '@tinymce/tinymce-react';
 import { CKEditor } from 'ckeditor4-react';
 
-const template = '<div id="mce-content" style="display: none;">%</div>\n{<TinyMCE />}';
+const template = '<div id="mce-content">%</div>\n{<CKEditor4 />}';
 
-export default function TinyMCE(props) {
+export default function CKEditor4(props) {
 
   return <CKEditor
     editorUrl={'/imgs/ckeditor4/ckeditor.js'}
@@ -13,6 +12,7 @@ export default function TinyMCE(props) {
       const {editor} = evt;
       const {parentNode} = editor.element.$;
       const stored = parentNode.querySelector(`#mce-content`);
+      stored.style.display = 'none';
       editor.setData(stored.innerHTML);
     } }
     onAfterCommandExec={(evt) => {
