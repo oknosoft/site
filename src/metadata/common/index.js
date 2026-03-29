@@ -4,6 +4,7 @@
 import i18ru from "./i18n.ru";
 import scale_svg from "./scale_svg";
 import superlogin from "./superlogin";
+import ui from 'metadata-ui';
 
 function loadScript(src, type) {
   for(const elm of document.head.children) {
@@ -19,6 +20,7 @@ function loadScript(src, type) {
 
 export default function ($p) {
   i18ru($p);
+  ui($p);
   Object.assign($p.utils, {scale_svg, loadScript});
   superlogin($p);
 }

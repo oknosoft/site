@@ -77,9 +77,11 @@ module.exports = function ($p, log, worker) {
           return mdm(req, res, conf);
         }
         if(['couchdb', '_session'].includes(parsed.paths[0])) {
-          return couchdbProxy(req, res, auth);
+          return auth(req, res)
+            .catch(err => null)
+            .then(() => couchdbProxy(req, res, auth));
         }
-        if(await articles(req, res)) {
+        if(parsed.paths[0] !== 'auth' && await articles(req, res)) {
           return;
         }
 
@@ -91,11 +93,12 @@ module.exports = function ($p, log, worker) {
           })
           .then((user) => {
             if(user) {
-
-              if(['adm', 'r', 'prm', 'plan'].includes(parsed.paths[0])) {
-                return adm(req, res);
+              if(parsed.paths[0] !== 'auth') {
+                if(['adm', 'r', 'prm'].includes(parsed.paths[0])) {
+                  return adm(req, res);
+                }
+                return end404(res, parsed.paths[0]);
               }
-              return end404(res, parsed.paths[0]);
             }
             else if(!res.finished) {
               return end401({req, res, err: parsed.paths[0], log});

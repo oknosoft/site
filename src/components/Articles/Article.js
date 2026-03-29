@@ -9,6 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 import IconContents from '@mui/icons-material/FormatListNumbered';
 import { useLocation } from 'react-router';
 
@@ -19,6 +20,7 @@ import Loading from '../App/Loading';
 import Footer from '../Home/Footer';
 import {useTitleContext} from '../App';
 import * as components from './components';
+import Articles from './Articles';
 
 const cprefix = '/couchdb/www_0_ram/cat.articles|';
 
@@ -27,8 +29,10 @@ const handleIfaceState = (...attr) => console.log(...attr);
 function Article({title}) {
   const {setTitle} = useTitleContext();
   const [doc, setDoc] = React.useState(null);
+  const [editMode, setEditMode] = React.useState(false);
   const location = useLocation();
   const ref = location.pathname;
+  const isContent = /^\/(files|files\/|articles|articles\/)$/.test(ref);
 
   React.useEffect(() => {
     const {articles} = $p.cat;
@@ -36,41 +40,59 @@ function Article({title}) {
     if(!tmp.empty()) {
       return setDoc(tmp);
     }
-    // если не нашли статью в памяти браузера, ищем на сервере
-    const headers = new Headers();
-    headers.set('Accept', 'application/json');
-    fetch(ref, {method: 'POST', headers})
-      .then(res => res.json())
-      .then(raw => {
-        if(raw.error && raw.message) {
-          throw new Error(raw.message);
-        }
-        articles.load_array([raw]);
-        document.getElementsByTagName('main')?.[0]?.scrollIntoView();
-        const doc = articles.get(raw.ref);
-        let parser;
-        for(const raw of doc.head.split('\n')) {
-          if(!parser) {
-            parser = new DOMParser()
+    if(!isContent) {
+      // если не нашли статью в памяти браузера, ищем на сервере
+      const headers = new Headers();
+      headers.set('Accept', 'application/json');
+      fetch(ref, {method: 'POST', headers})
+        .then(res => res.json())
+        .then(raw => {
+          if(raw.error && raw.message) {
+            throw new Error(raw.message);
           }
-          const tag = parser.parseFromString(raw, 'text/xml').children[0];
-          if(tag.tagName.toLowerCase() === 'link' && tag.attributes.rel.value === 'stylesheet') {
-            $p.utils.loadScript(tag.attributes.href.value, 'link');
+          articles.load_array([raw]);
+          document.getElementsByTagName('main')?.[0]?.scrollIntoView();
+          const doc = articles.get(raw.ref);
+          let parser;
+          for(const raw of doc.head.split('\n')) {
+            if(!parser) {
+              parser = new DOMParser()
+            }
+            const tag = parser.parseFromString(raw, 'text/xml').children[0];
+            if(tag.tagName.toLowerCase() === 'link' && tag.attributes.rel.value === 'stylesheet') {
+              $p.utils.loadScript(tag.attributes.href.value, 'link');
+            }
           }
-        }
-        return setDoc(doc);
-      })
-      .catch(err => setDoc(err));
+          return setDoc(doc);
+        })
+        .catch(err => setDoc(err));
+    }
   }, [ref]);
 
+  if(isContent) {
+    return  <Articles/>;
+  }
   if(!doc) {
     return <Loading />;
   }
+
   if(doc === 404 || doc instanceof Error) {
     return <NotFound title={title}  />;
   }
+
+  if(doc.kind.is('gantt')) {
+    const {JQueryGantt} = components;
+    return <JQueryGantt doc={doc} setTitle={setTitle}/>;
+  }
+
+  if(editMode) {
+    const {CKEditor4} = components;
+    return <React.Suspense fallback={<Loading />}><CKEditor4 doc={doc} direct/></React.Suspense>;
+  }
+
   const mprops = {
     title,
+    titleBtns: <IconButton onClick={() => setEditMode((editMode) => !editMode)}><EditIcon /></IconButton>,
     htitle: doc.name || 'без названия',
     handleIfaceState,
     h1: doc.h1,

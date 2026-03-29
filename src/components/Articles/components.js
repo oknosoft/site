@@ -1,12 +1,12 @@
 import React from 'react';
-//import ImgCarousel from './ImgCarousel';
 
 export const Attachments = React.lazy(() => import('./Attachments'));
 export const Contents = React.lazy(() => import('./Contents'));
 export const ImgList = React.lazy(() => import('./ImgList'));
 export const CKEditor4 = React.lazy(() => import('./CKEditor4'));
 export const DgrmJS = React.lazy(() => import('./DgrmJS'));
-//export {ImgCarousel};// = React.lazy(() => import('./ImgCarousel'));
+export const JQueryGantt = React.lazy(() => import('./JQueryGantt'));
+export const ImgCarousel = React.lazy(() => import('./ImgCarousel'));
 export const LightWinCalc = React.lazy(() => import('./LightWinCalc'));
 export const Cut1DDemo = React.lazy(() => import('../../metadata/documents/work_centers_task/Cut1D'));
 export const Cut2DDemo = React.lazy(() => import('../../metadata/documents/work_centers_task/Cut2D'));

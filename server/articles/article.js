@@ -58,9 +58,16 @@ module.exports = async (req, res, articles, log) => {
     return true;
   }
   else {
-    // если статья не найдена
-    res.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
-    res.end(await fill('404'));
+    const isContent = /^(files|files\/|articles|articles\/)$/.test(path);
+    if(isContent) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.end(await contents(articles, path));
+    }
+    else {
+      // если статья не найдена
+      res.writeHead(404, {'Content-Type': 'text/html; charset=utf-8'});
+      res.end(await fill('404'));
+    }
   }
   return true;
 };
@@ -76,6 +83,18 @@ async function fill(doc) {
   else {
     const title = doc.name;
     const descr = doc.descr || doc.introduction;
+    let content = '';
+    if(!doc.kind.is('gantt')) {
+      const tmp = (doc.content || '')
+        .replace(/<ssr/gm, `<div`)
+        .replace(/ssr>/gm, `div>`)
+        .replace(/!\[image]\(this/gm, `![image](${cache.cprefix}${doc.ref}`)
+        .replace(/src="this\//gm, `src="${cache.cprefix}${doc.ref}/`)
+        .replace(/~\//gm, `${cache.cprefix}${doc.ref}/`)
+        .replace(/({<.*?>})/gm, '');
+      content = doc.kind.is('html') ? tmp : marked.parse(tmp);
+    }
+
     html = html.replace(
       `<title>${cache.title}</title>`,
       `<title>${title}</title>`)
@@ -93,15 +112,7 @@ async function fill(doc) {
       `<div id="root"></div>`,
       `<div id="root"><div style="max-width: 960px; padding: 48px 8px; margin: auto; color: #777;">
 <h1>${doc.h1 || doc.name}</h1>
-${marked.parse(
-        (doc.content || '')
-          .replace(/<ssr/gm, `<div`)
-          .replace(/ssr>/gm, `div>`)
-          .replace(/!\[image]\(this/gm, `![image](${cache.cprefix}${doc.ref}`)
-          .replace(/src="this\//gm, `src="${cache.cprefix}${doc.ref}/`)
-          .replace(/~\//gm, `${cache.cprefix}${doc.ref}/`)
-          .replace(/({<.*?>})/gm, ''),
-      )}
+${content}
 ${doc.category.is('contents') ? doc.articles
         .map(({paper}) => `<a href="/${paper.id}" style="display: list-item;">${paper.name}</a>`)
         .join('\n') : ''}</div></div>`);
@@ -110,5 +121,37 @@ ${doc.category.is('contents') ? doc.articles
       html = html.replace(`${cache.su}/imgs/flask_192.png`, doc.img.replace('~/', `${cache.cprefix}${doc.ref}/`));
     }
   }
+  return html;
+}
+
+async function contents(articles, path) {
+  let html = await cache.load();
+  const title = path === 'files' ? 'Файлы' : 'Статьи';
+  const descr = 'Содержание (список) документов';
+  const docs = articles.find_rows({category: path === 'files' ? 'file' : 'article', published: true})
+    .sort(articles._owner.$p.utils.sort('sorting_field', 'desc'));
+  const content = `<ul>
+${docs.map((doc, index) => `<li><a href="/${doc.id}">${doc.name}</a></li>`).join('\n')}
+</ul>`;
+
+  html = html.replace(
+    `<title>${cache.title}</title>`,
+    `<title>${title}</title>`)
+    .replace(
+      `<meta property="og:title" content="${cache.title}" data-react-helmet="true">`,
+      `<meta property="og:title" content="${title}" data-react-helmet="true">`)
+    .replace(
+      `<meta name="description" content="${cache.description}" data-react-helmet="true">`,
+      `<meta name="description" content="${descr}" data-react-helmet="true">`)
+    .replace(
+      `<meta property="og:description" content="${cache.description}" data-react-helmet="true">`,
+      `<meta property="og:description" content="${descr}" data-react-helmet="true">`)
+    .replace(
+      `<div id="root"></div>`,
+      `<div id="root"><div style="max-width: 960px; padding: 48px 8px; margin: auto; color: #777;">
+<h1>${title}</h1>
+${content}
+</div></div>`);
+
   return html;
 }

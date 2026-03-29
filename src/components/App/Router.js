@@ -11,11 +11,10 @@ import RootWithDrawer from './RootWithDrawer';
 
 import Home from '../Home';
 import Article from '../Articles/Article';
-import Articles from '../Articles/Articles';
 import Apidocs from '../Apidocs';
+import FrmLogin from '../FrmLogin';
 
 const DataRoute = () => 'DataRoute';
-const FrmLogin = () => 'FrmLogin';
 const loginRoute = <FrmLogin />;
 const element = <RootWithDrawer />;
 
@@ -31,8 +30,6 @@ export const router = createBrowserRouter([
       {path: "profile", element: loginRoute},
       {path: "password-reset", element: loginRoute},
       {path: "apidocs/*", element: <Apidocs />},
-      {path: "files", element: <Articles />},
-      {path: "articles", element: <Articles />},
       {path: "*", element: <Article />},
     ],
   },

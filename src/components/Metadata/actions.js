@@ -56,11 +56,11 @@ export function actions(handleIfaceState) {
     })
     .then(() => {
       const {classes: {PouchDB}, adapters: {pouch}, job_prm, md, ui, cat: {users}} = $p;
-      handleIfaceState({common_loaded: true});
-      //ui.dialogs.init({handleIfaceState, handleNavigate, {}});
+      ui.dialogs.init({handleIfaceState});
 
       const {remote, fetch} = pouch;
       remote.ram = new PouchDB(pouch.dbpath('ram'), {skip_setup: true, owner: pouch, fetch});
+      handleIfaceState({common_loaded: true});
 
       pouch.on({
         pouch_complete_loaded() {
@@ -83,30 +83,15 @@ export function actions(handleIfaceState) {
               log_error: '',
             }});
 
-          const {remote, fetch} = pouch;
-          remote.ram = new PouchDB(pouch.dbpath('ram'), {skip_setup: true, owner: pouch, fetch});
+          // const {remote, fetch} = pouch;
+          // remote.ram = new PouchDB(pouch.dbpath('ram'), {skip_setup: true, owner: pouch, fetch});
 
-          return load_ram($p)
-            .then(() => {
-              const {roles} = $p.current_user || {};
-              if(roles && (roles.includes('ram_editor') || roles.includes('doc_full'))) {
-                pouch.local.sync.ram = pouch.remote.ram.changes({
-                  since: 'now',
-                  live: true,
-                  include_docs: true
-                })
-                  .on('change', (change) => {
-                    // информируем слушателей текущего сеанса об изменениях
-                    if(change.doc.obj_delivery_state !== 'Шаблон') {
-                      pouch.load_changes({docs: [change.doc]});
-                      pouch.emit('ram_change', change);
-                    }
-                  })
-                  .on('error', (err) => {
-                    $p.record_log(err);
-                  });
-              }
-            });
+        },
+
+        authenticated(attr) {
+          if(!users.by_ref[attr.rev]) {
+            users.load_array([attr]);
+          }
         }
       });
 

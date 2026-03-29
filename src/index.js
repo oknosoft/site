@@ -24,4 +24,5 @@ swRegistration.register({
 });
 */
 swRegistration.unregister();
+sessionStorage.clear();
 

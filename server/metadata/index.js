@@ -44,6 +44,7 @@ module.exports = function (log, is_common) {
 
   // подключим модификаторы
   //modifiers($p, log);
+  require('./server_cat_users')($p, log);
 
   // подключаем обработчики событий адаптера данных
   pouch.on({

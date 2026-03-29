@@ -15,7 +15,7 @@ export default function RootWithDrawer(props) {
     boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%)',
   };
 
-  const {handleIfaceState, ifaceState: {menu_open}} = useLoadingContext();
+  const {handleIfaceState, ifaceState: {menu_open, common_loaded}} = useLoadingContext();
 
   const handleDrawerOpen = () => {
     handleIfaceState({menu_open: true});
@@ -31,7 +31,7 @@ export default function RootWithDrawer(props) {
     <Drawer menu_open={menu_open} theme={theme} handleDrawerClose={handleDrawerClose} sxColor={sxColor}/>
     <Main open={menu_open}>
       <Space />
-      <ErrorBoundary />
+      <ErrorBoundary loaded={common_loaded}/>
     </Main>
   </Root>;
 
